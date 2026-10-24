@@ -5,6 +5,12 @@
 
 现在这个仓库同时是**网页源**和 **Android APK 的构建工程**，不需要 Android Studio、不需要 Gradle，一条命令出包。
 
+## 下载安装
+
+- **APK 下载**：<https://github.com/wwwwwlmr/yqqs-draw/releases/latest>
+- 仓库地址：<https://github.com/wwwwwlmr/yqqs-draw>
+- 网页版：直接打开 `web/index.html` 即可（无需服务器）
+
 ---
 
 ## 目录结构
