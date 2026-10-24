@@ -1,0 +1,20 @@
+# 构建产物
+build/
+dist/
+
+# 工具链（用 tools/fetch_toolchain.py 重新下载）
+tools/downloads/
+tools/jdk/
+tools/build-tools/
+tools/platform/
+tools/repo.xml
+tools/probe.py
+
+# 签名密钥请自行备份，不要提交到公开仓库
+android/keystore/
+
+# 系统垃圾
+Thumbs.db
+desktop.ini
+__pycache__/
+*.pyc
