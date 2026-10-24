@@ -246,6 +246,7 @@ def main():
         "--ks", KEYSTORE, "--ks-key-alias", KS_ALIAS,
         "--ks-pass", "pass:" + KS_PASS, "--key-pass", "pass:" + KS_PASS,
         "--v1-signing-enabled", "true", "--v2-signing-enabled", "true",
+        "--v4-signing-enabled", "false",
         "--out", out_apk, aligned,
     ], env=tc["env"])
 
