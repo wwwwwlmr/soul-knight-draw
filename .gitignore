@@ -10,6 +10,11 @@ tools/platform/
 tools/repo.xml
 tools/probe.py
 
+# 本地 GitHub CLI（含登录态，绝不入库）
+tools/gh/
+tools/gh-config/
+tools/gh-logs/
+
 # 签名密钥请自行备份，不要提交到公开仓库
 android/keystore/
 
