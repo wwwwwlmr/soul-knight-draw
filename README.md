@@ -19,7 +19,7 @@
 yqqs-draw/
 ├── web/                        # 网页本体（唯一需要维护的内容）
 │   ├── index.html              # 单文件页面：样式 + 逻辑 + 内嵌 DATA 数据
-│   ├── assets/                 # 角色/技能/皮肤图片（798 gif + 146 png）
+│   ├── assets/                 # 角色/技能/皮肤图片（792 gif + 146 png）
 │   └── _shared/fonts/          # 页面用的两款字体
 ├── android/                    # Android 容器工程（只是壳）
 │   ├── AndroidManifest.xml
@@ -43,7 +43,7 @@ yqqs-draw/
 python tools/fetch_toolchain.py
 
 # 之后每次：
-python build.py            # 产物在 dist/yqqs-draw-v1.1.1.apk
+python build.py            # 产物在 dist/yqqs-draw-v1.1.2.apk
 python build.py --clean    # 干净重建
 ```
 
@@ -60,7 +60,7 @@ python build.py --clean    # 干净重建
 
 ## 安装
 
-把 `dist/yqqs-draw-v1.1.1.apk` 传到手机点开安装（需要允许「安装未知来源应用」）。
+把 `dist/yqqs-draw-v1.1.2.apk` 传到手机点开安装（需要允许「安装未知来源应用」）。
 应用完全离线：**没有申请 INTERNET 权限**，页面、图片、字体都在安装包里。
 
 ## 签名密钥

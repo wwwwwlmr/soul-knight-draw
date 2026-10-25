@@ -3,8 +3,8 @@
      本应用完全离线：页面、图片、字体全部打包在 assets 里，因此不申请 INTERNET 权限。 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yqqs.gacha"
-    android:versionCode="3"
-    android:versionName="1.1.1">
+    android:versionCode="4"
+    android:versionName="1.1.2">
 
     <uses-sdk
         android:minSdkVersion="21"

@@ -38,7 +38,7 @@ KEYSTORE = os.path.join(ANDROID, "keystore", "yqqs-release.jks")
 KS_PASS = "yqqs-draw-2024"
 KS_ALIAS = "yqqs"
 
-VERSION = "1.1.1"
+VERSION = "1.1.2"
 
 
 def log(msg):
