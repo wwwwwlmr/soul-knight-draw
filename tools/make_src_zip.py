@@ -11,7 +11,9 @@ EXCLUDE_DIRS = {"tools/downloads", "tools/jdk", "tools/build-tools", "tools/plat
 
 
 def skip(rel):
-    for ex in ("tools/downloads", "tools/jdk", "tools/build-tools", "tools/platform", "build", "dist"):
+    # 工具链、构建产物、以及带登录态的 gh 目录（.git-creds 里有 token）一律不进包
+    for ex in ("tools/downloads", "tools/jdk", "tools/build-tools", "tools/platform",
+               "tools/gh", "tools/gh-config", "tools/gh-logs", "build", "dist"):
         if rel == ex or rel.startswith(ex + "/"):
             return True
     return "__pycache__" in rel
