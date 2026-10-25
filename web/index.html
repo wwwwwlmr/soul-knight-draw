@@ -73,6 +73,21 @@ h1.title {
 .subtitle { color:var(--muted); font-size:14px; letter-spacing:4px; margin-top:10px; }
 .subtitle b { color:var(--accent2); font-weight:700; }
 
+/* 抽卡模式切换 */
+.mode-switch {
+  display: flex; justify-content: center; gap: 6px; width: max-content; max-width: 100%;
+  margin: -8px auto 10px; padding: 5px; border: 1px solid var(--rule); border-radius: 999px;
+  background: rgba(255,255,255,.03);
+}
+.mode-btn {
+  padding: 7px 22px; border: 0; border-radius: 999px; background: transparent; color: var(--muted);
+  font-size: 13px; letter-spacing: 2px; cursor: pointer; font-family: inherit; transition: all .18s ease;
+}
+.mode-btn:hover { color: var(--ink); }
+.mode-btn.active { background: linear-gradient(135deg, var(--gold), var(--accent)); color: #2a1400; font-weight: 800; }
+.mode-hint { text-align: center; font-size: 12px; color: #5f6f93; letter-spacing: 1px; margin-bottom: 22px; min-height: 18px; }
+.mode-hint b { color: var(--accent); }
+
 /* 抽卡按钮 */
 .draw-btn {
   display:block; margin:0 auto 34px; padding:18px 64px; font-size:22px; font-weight:800;
@@ -172,6 +187,124 @@ h1.title {
 .stats { text-align:center; color:#5a6b8f; font-size:12px; margin-top:22px; letter-spacing:1px; }
 .stats b { color:var(--accent); font-weight:700; }
 
+/* ===== 卡池侧边栏 ===== */
+.pool-fab {
+  position: fixed; right: 18px; bottom: 18px; z-index: 40;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: 999px; border: 1px solid rgba(255,176,32,.55);
+  background: linear-gradient(135deg, #ffd54f, #ff8f00);
+  color: #2a1400; font-weight: 800; font-size: 15px; letter-spacing: 2px;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 10px 26px rgba(255,120,0,.35);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.pool-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(255,120,0,.45); }
+.pool-fab:active { transform: scale(.97); }
+.pool-mask {
+  position: fixed; inset: 0; background: rgba(3,6,16,.62);
+  opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: 50;
+}
+.pool-mask.open { opacity: 1; pointer-events: auto; }
+.pool-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 51;
+  width: min(430px, 92vw); display: flex; flex-direction: column;
+  background: linear-gradient(165deg, #131b33 0%, #0a0f1e 100%);
+  border-left: 1px solid var(--rule);
+  box-shadow: -18px 0 50px rgba(0,0,0,.55);
+  transform: translateX(102%); transition: transform .28s cubic-bezier(.22,.8,.3,1);
+}
+.pool-drawer.open { transform: translateX(0); }
+.pool-head { display: flex; align-items: center; gap: 10px; padding: 16px 18px 12px; border-bottom: 1px solid var(--rule); }
+.pool-head h2 { font-size: 17px; letter-spacing: 3px; color: var(--gold); font-weight: 800; }
+.pool-close {
+  margin-left: auto; width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--rule);
+  background: transparent; color: var(--ink); font-size: 15px; cursor: pointer; font-family: inherit;
+}
+.pool-close:hover { background: rgba(255,255,255,.06); }
+.pool-tabs { display: flex; gap: 8px; padding: 12px 16px 0; }
+.pool-tab {
+  flex: 1; padding: 10px 8px; border-radius: 10px; border: 1px solid var(--rule);
+  background: rgba(255,255,255,.03); color: var(--muted); font-size: 14px; letter-spacing: 2px;
+  cursor: pointer; font-family: inherit; transition: all .15s ease;
+}
+.pool-tab.active { color: #2a1400; background: linear-gradient(135deg, var(--gold), var(--accent)); border-color: transparent; font-weight: 800; }
+.pool-body { flex: 1; overflow-y: auto; padding: 14px 16px 20px; -webkit-overflow-scrolling: touch; }
+.pool-note { font-size: 11.5px; color: #5f6f93; line-height: 1.6; margin: 8px 2px 14px; letter-spacing: .5px; }
+.pool-foot {
+  border-top: 1px solid var(--rule); padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  background: rgba(0,0,0,.18);
+}
+.pool-foot .summary { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.pool-foot .summary b { color: var(--accent); }
+.ghost-btn {
+  padding: 8px 12px; border-radius: 9px; border: 1px solid var(--rule); background: transparent;
+  color: var(--ink); font-size: 12px; letter-spacing: 1px; cursor: pointer; font-family: inherit; white-space: nowrap;
+}
+.ghost-btn:hover { background: rgba(255,255,255,.06); }
+.ghost-btn.accent { border-color: rgba(255,176,32,.6); color: var(--accent); }
+.pool-section { margin-bottom: 16px; }
+.pool-section-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; color: #c8d6f0; letter-spacing: 1px; }
+.pool-section-head b { color: var(--accent); font-weight: 700; }
+.pool-section-head .mini-btns { margin-left: auto; display: flex; gap: 6px; }
+.mini-btns button {
+  padding: 4px 9px; border-radius: 7px; border: 1px solid var(--rule); background: transparent;
+  color: var(--muted); font-size: 11px; cursor: pointer; font-family: inherit;
+}
+.mini-btns button:hover { color: var(--ink); border-color: rgba(255,176,32,.5); }
+.chip-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+.char-chip {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 7px 4px 5px; border-radius: 10px; border: 1px solid var(--rule);
+  background: rgba(255,255,255,.03); cursor: pointer; user-select: none; font-family: inherit;
+  transition: all .15s ease; overflow: hidden;
+}
+.char-chip img { width: 36px; height: 36px; object-fit: contain; }
+.char-chip span { font-size: 11px; color: #c8d6f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.char-chip.on { border-color: rgba(255,176,32,.75); background: rgba(255,176,32,.12); box-shadow: inset 0 0 0 1px rgba(255,176,32,.22); }
+.char-chip.on span { color: var(--gold); font-weight: 700; }
+.char-chip.off { opacity: .34; filter: grayscale(.9); }
+.pool-item { border: 1px solid var(--rule); border-radius: 11px; margin-bottom: 8px; overflow: hidden; background: rgba(255,255,255,.02); }
+.pool-item > summary { list-style: none; display: flex; align-items: center; gap: 9px; padding: 9px 12px; cursor: pointer; }
+.pool-item > summary::-webkit-details-marker { display: none; }
+.pool-item > summary img { width: 28px; height: 28px; object-fit: contain; }
+.pool-item > summary .name { font-size: 13px; color: #dbe6ff; }
+.pool-item > summary .count { margin-left: auto; font-size: 11px; color: var(--muted); }
+.pool-item[open] > summary { border-bottom: 1px solid rgba(42,53,84,.7); }
+.pool-item .list { padding: 4px 8px 8px; }
+.check-row { display: flex; align-items: center; gap: 9px; padding: 6px; border-radius: 8px; }
+.check-row:hover { background: rgba(255,255,255,.04); }
+.check-row img { width: 26px; height: 26px; object-fit: contain; border-radius: 6px; background: rgba(255,255,255,.05); flex: 0 0 auto; }
+.check-row .label { font-size: 12.5px; color: #c3d1ee; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.check-row .tag { margin-left: auto; font-size: 10.5px; color: #5a6b8f; flex: 0 0 auto; }
+.check-row input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--accent); flex: 0 0 auto; }
+.check-row.char-row { border-bottom: 1px dashed rgba(42,53,84,.9); border-radius: 0; margin-bottom: 4px; padding-bottom: 8px; }
+.pool-item.is-cut { opacity: .8; border-color: rgba(255,82,82,.35); }
+.pool-item.is-cut > summary { background: rgba(255,82,82,.07); }
+.check-row.disabled { opacity: .45; }
+.empty-tip { color: #5a6b8f; font-size: 12px; padding: 8px 4px; }
+.pool-search {
+  width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--rule);
+  background: rgba(255,255,255,.04); color: var(--ink); font-size: 13px; font-family: inherit; outline: none; margin-bottom: 12px;
+}
+.pool-search:focus { border-color: rgba(255,176,32,.6); }
+.pool-search::placeholder { color: #5a6b8f; }
+.pool-toast {
+  position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%) translateY(10px);
+  background: rgba(20,26,46,.97); border: 1px solid rgba(255,176,32,.45); color: #ffe6b8;
+  padding: 10px 18px; border-radius: 12px; font-size: 13px; line-height: 1.5;
+  opacity: 0; pointer-events: none; transition: all .25s ease; z-index: 60; max-width: 86vw; text-align: center;
+}
+.pool-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+body.pool-open { overflow: hidden; }
+
+@media (max-width:600px) {
+  .pool-drawer { width: 100%; border-left: 0; }
+  .pool-fab { right: 14px; bottom: 14px; padding: 11px 16px; font-size: 14px; }
+  .chip-grid { gap: 6px; }
+  .char-chip img { width: 32px; height: 32px; }
+  .pool-toast { bottom: 88px; }
+}
+
 /* 页脚 */
 footer { text-align:center; color:#3d4a6b; font-size:12px; margin-top:30px; letter-spacing:1px; }
 
@@ -197,6 +330,12 @@ footer { text-align:center; color:#3d4a6b; font-size:12px; margin-top:30px; lett
     <h1 class="title">元 气 骑 士</h1>
     <div class="subtitle">二 重 抽 卡 · <b>角色技能</b> × <b>专属皮肤</b></div>
   </header>
+
+  <div class="mode-switch" id="modeSwitch" role="tablist" aria-label="抽卡模式">
+    <button class="mode-btn active" data-mode="precise" type="button" role="tab" aria-selected="true">精 准 模 式</button>
+    <button class="mode-btn" data-mode="custom" type="button" role="tab" aria-selected="false">自 定 义 模 式</button>
+  </div>
+  <div class="mode-hint" id="modeHint"></div>
 
   <button class="draw-btn" id="drawBtn">开 始 抽 卡</button>
 
@@ -231,6 +370,26 @@ footer { text-align:center; color:#3d4a6b; font-size:12px; margin-top:30px; lett
   <footer>数据来源：元气骑士中文维基 · 仅供娱乐</footer>
 </div>
 
+<!-- ===== 卡池侧边栏 ===== -->
+<button class="pool-fab" id="poolFab" type="button" aria-haspopup="dialog">⚙ 卡 池</button>
+<div class="pool-mask" id="poolMask"></div>
+<aside class="pool-drawer" id="poolDrawer" role="dialog" aria-modal="true" aria-label="卡池设置">
+  <div class="pool-head">
+    <h2>卡 池 设 置</h2>
+    <button class="pool-close" id="poolClose" type="button" aria-label="关闭卡池设置">✕</button>
+  </div>
+  <div class="pool-tabs" id="poolTabs">
+    <button class="pool-tab active" data-tab="precise" type="button">精准模式</button>
+    <button class="pool-tab" data-tab="custom" type="button">自定义模式</button>
+  </div>
+  <div class="pool-body" id="poolBody"></div>
+  <div class="pool-foot">
+    <button class="ghost-btn accent" id="poolReset" type="button">恢复全收集</button>
+    <div class="summary" id="poolSummary"></div>
+  </div>
+</aside>
+<div class="pool-toast" id="poolToast"></div>
+
 <script>
 const DATA = {"charSkill": [{"char": "骑士", "skill": "火力全开", "avatar": "assets/img_29ee47be744b.png", "skillImg": "assets/img_d8aae18e2e2c.png"}, {"char": "骑士", "skill": "全力攻击", "avatar": "assets/img_29ee47be744b.png", "skillImg": "assets/img_d11d17c89b34.png"}, {"char": "骑士", "skill": "混沌打击", "avatar": "assets/img_29ee47be744b.png", "skillImg": "assets/img_78274c072fff.png"}, {"char": "游侠", "skill": "翻滚", "avatar": "assets/img_cd0009bf5fa4.png", "skillImg": "assets/img_b44688a1eb9f.png"}, {"char": "游侠", "skill": "居合斩", "avatar": "assets/img_cd0009bf5fa4.png", "skillImg": "assets/img_1f858025def0.png"}, {"char": "游侠", "skill": "地堂刀", "avatar": "assets/img_cd0009bf5fa4.png", "skillImg": "assets/img_daf9334e00b7.png"}, {"char": "法师", "skill": "奥术闪电", "avatar": "assets/img_51b6627ca709.png", "skillImg": "assets/img_23e48b981a26.png"}, {"char": "法师", "skill": "寒冰穿刺", "avatar": "assets/img_51b6627ca709.png", "skillImg": "assets/img_0cd7792443c8.png"}, {"char": "法师", "skill": "火焰飓风", "avatar": "assets/img_51b6627ca709.png", "skillImg": "assets/img_3b2233a8f69e.png"}, {"char": "刺客", "skill": "暗影之刃", "avatar": "assets/img_81e02b275774.png", "skillImg": "assets/img_94c79047af80.png"}, {"char": "刺客", "skill": "分身术", "avatar": "assets/img_81e02b275774.png", "skillImg": "assets/img_8d97420a44d9.png"}, {"char": "刺客", "skill": "影遁", "avatar": "assets/img_81e02b275774.png", "skillImg": "assets/img_6a67dac0e6ff.png"}, {"char": "炼金术士", "skill": "毒气炸弹", "avatar": "assets/img_417b688691ba.png", "skillImg": "assets/img_197fb0d360d0.png"}, {"char": "炼金术士", "skill": "元素药剂", "avatar": "assets/img_417b688691ba.png", "skillImg": "assets/img_c7be8d4cb2c9.png"}, {"char": "炼金术士", "skill": "蜜汁饮剂", "avatar": "assets/img_417b688691ba.png", "skillImg": "assets/img_b6230b730c59.png"}, {"char": "工程师", "skill": "工程炮台", "avatar": "assets/img_a4d4d3984a92.png", "skillImg": "assets/img_c676507ef83b.png"}, {"char": "工程师", "skill": "机甲武装", "avatar": "assets/img_a4d4d3984a92.png", "skillImg": "assets/img_9ee05256f0f0.png"}, {"char": "工程师", "skill": "迎击炮台", "avatar": "assets/img_a4d4d3984a92.png", "skillImg": "assets/img_dfd7c0d28228.png"}, {"char": "吸血鬼", "skill": "蝙蝠突袭", "avatar": "assets/img_63075d29217b.png", "skillImg": "assets/img_e7debbcfa785.png"}, {"char": "吸血鬼", "skill": "异界旋涡", "avatar": "assets/img_63075d29217b.png", "skillImg": "assets/img_4434e38eab54.png"}, {"char": "吸血鬼", "skill": "不朽之躯", "avatar": "assets/img_63075d29217b.png", "skillImg": "assets/img_0f76fd48fb97.png"}, {"char": "圣骑士", "skill": "能量护盾", "avatar": "assets/img_9ccd65ad06fd.png", "skillImg": "assets/img_5dc23b18244a.png"}, {"char": "圣骑士", "skill": "神化", "avatar": "assets/img_9ccd65ad06fd.png", "skillImg": "assets/img_95c888052456.png"}, {"char": "圣骑士", "skill": "爆裂飞盾", "avatar": "assets/img_9ccd65ad06fd.png", "skillImg": "assets/img_2a2d375f878a.png"}, {"char": "精灵", "skill": "专注射击", "avatar": "assets/img_57147fe013b5.png", "skillImg": "assets/img_f850e089fdb2.png"}, {"char": "精灵", "skill": "箭雨", "avatar": "assets/img_57147fe013b5.png", "skillImg": "assets/img_2196b6c9293e.png"}, {"char": "精灵", "skill": "守护精灵", "avatar": "assets/img_57147fe013b5.png", "skillImg": "assets/img_fc332cc0196f.png"}, {"char": "狼人", "skill": "狂化", "avatar": "assets/img_bb49d14d4f8d.png", "skillImg": "assets/img_ea70211001d2.png"}, {"char": "狼人", "skill": "嗜血斩击", "avatar": "assets/img_bb49d14d4f8d.png", "skillImg": "assets/img_f0de9012e6e5.png"}, {"char": "狼人", "skill": "吞噬", "avatar": "assets/img_bb49d14d4f8d.png", "skillImg": "assets/img_3795db9b9bb5.png"}, {"char": "牧师", "skill": "恢复法阵", "avatar": "assets/img_7e44a8baa706.png", "skillImg": "assets/img_b0bff5ee13c5.png"}, {"char": "牧师", "skill": "祈祷", "avatar": "assets/img_7e44a8baa706.png", "skillImg": "assets/img_264bbc6ad548.png"}, {"char": "牧师", "skill": "月影之息", "avatar": "assets/img_7e44a8baa706.png", "skillImg": "assets/img_461211cbbb4e.png"}, {"char": "德鲁伊", "skill": "霜烬狼袭", "avatar": "assets/img_49b728d556a7.png", "skillImg": "assets/img_2da90cc16467.png"}, {"char": "德鲁伊", "skill": "剧毒藤蔓", "avatar": "assets/img_49b728d556a7.png", "skillImg": "assets/img_d46b3ac385e1.png"}, {"char": "德鲁伊", "skill": "召唤巨熊", "avatar": "assets/img_49b728d556a7.png", "skillImg": "assets/img_ed691a15ce5a.png"}, {"char": "机器人", "skill": "电能过载", "avatar": "assets/img_e92579b809dc.png", "skillImg": "assets/img_aaaea532a89e.png"}, {"char": "机器人", "skill": "无人机集群", "avatar": "assets/img_e92579b809dc.png", "skillImg": "assets/img_de303cdd2832.png"}, {"char": "机器人", "skill": "电磁脉冲", "avatar": "assets/img_e92579b809dc.png", "skillImg": "assets/img_3574aeac3f6a.png"}, {"char": "狂战士", "skill": "狂暴", "avatar": "assets/img_3575d0e08a99.png", "skillImg": "assets/img_38f127c11123.png"}, {"char": "狂战士", "skill": "散打", "avatar": "assets/img_3575d0e08a99.png", "skillImg": "assets/img_fd4ccd71cc3c.png"}, {"char": "狂战士", "skill": "跳跃", "avatar": "assets/img_3575d0e08a99.png", "skillImg": "assets/img_42336fd8ecd2.png"}, {"char": "死灵法师", "skill": "噩梦印记", "avatar": "assets/img_4b64c23eaa5d.png", "skillImg": "assets/img_a2c1e5eb648b.png"}, {"char": "死灵法师", "skill": "灾祸之石", "avatar": "assets/img_4b64c23eaa5d.png", "skillImg": "assets/img_cf86430f4b3c.png"}, {"char": "死灵法师", "skill": "亡灵复生", "avatar": "assets/img_4b64c23eaa5d.png", "skillImg": "assets/img_c21a51de15af.png"}, {"char": "警官", "skill": "转枪", "avatar": "assets/img_b992abf1d12b.png", "skillImg": "assets/img_221cec84b1ff.png"}, {"char": "警官", "skill": "赏金标记", "avatar": "assets/img_b992abf1d12b.png", "skillImg": "assets/img_872a8139d3ad.png"}, {"char": "警官", "skill": "空中支援", "avatar": "assets/img_b992abf1d12b.png", "skillImg": "assets/img_40ce1b7a4c20.png"}, {"char": "道士", "skill": "万剑归宗", "avatar": "assets/img_2503de44edbf.png", "skillImg": "assets/img_8e41e2c626a0.png"}, {"char": "道士", "skill": "乾坤大挪移", "avatar": "assets/img_2503de44edbf.png", "skillImg": "assets/img_0daee9ba72c1.png"}, {"char": "道士", "skill": "御剑术", "avatar": "assets/img_2503de44edbf.png", "skillImg": "assets/img_0aa996ee4c95.png"}, {"char": "超界者", "skill": "维度跃迁", "avatar": "assets/img_4f80320f5b83.png", "skillImg": "assets/img_a088f49ab784.png"}, {"char": "超界者", "skill": "黑洞折射", "avatar": "assets/img_4f80320f5b83.png", "skillImg": "assets/img_6782c5ffc86e.png"}, {"char": "古代元素使", "skill": "元素亲和", "avatar": "assets/img_9a9c30caed6e.png", "skillImg": "assets/img_893f57fbe903.png"}, {"char": "枭首者", "skill": "斯巴达飞踢", "avatar": "assets/img_1a5ba37254ac.png", "skillImg": "assets/img_3c416d9499b5.png"}, {"char": "超时空忍者", "skill": "时空间手里剑", "avatar": "assets/img_1875a8f3d7a9.png", "skillImg": "assets/img_423d6bae8c2c.png"}, {"char": "超时空忍者", "skill": "超时空猎杀", "avatar": "assets/img_1875a8f3d7a9.png", "skillImg": "assets/img_c200d763f371.png"}, {"char": "特种骑士部队", "skill": "特种作战配合", "avatar": "assets/img_657b8cf9f41f.png", "skillImg": "assets/img_0ba5178b865b.png"}, {"char": "气宗", "skill": "冲脉拳", "avatar": "assets/img_02d2dc8b4a49.png", "skillImg": "assets/img_0b9297670091.png"}, {"char": "气宗", "skill": "斗转星移", "avatar": "assets/img_02d2dc8b4a49.png", "skillImg": "assets/img_3c327a8d6268.png"}, {"char": "气宗", "skill": "六脉神剑", "avatar": "assets/img_02d2dc8b4a49.png", "skillImg": "assets/img_9f6e7c480706.png"}, {"char": "恶魔术士", "skill": "阿米的燃烧之躯", "avatar": "assets/img_ed8a7aef610f.png", "skillImg": "assets/img_0ffdd724406b.png"}, {"char": "恶魔术士", "skill": "协力：艾利欧格", "avatar": "assets/img_ed8a7aef610f.png", "skillImg": "assets/img_2cb11627bd52.png"}, {"char": "恶魔术士", "skill": "阿蒙的庇护", "avatar": "assets/img_ed8a7aef610f.png", "skillImg": "assets/img_1b6aa812cd67.png"}, {"char": "矿工", "skill": "地底行动", "avatar": "assets/img_bbf6eab9a497.png", "skillImg": "assets/img_5dc1e60b6348.png"}, {"char": "矿工", "skill": "矿车速递", "avatar": "assets/img_bbf6eab9a497.png", "skillImg": "assets/img_8dcfbcaa8f29.png"}, {"char": "矿工", "skill": "沙虫来袭", "avatar": "assets/img_bbf6eab9a497.png", "skillImg": "assets/img_14522c0339a0.png"}, {"char": "陷阱大师", "skill": "遥控炸弹", "avatar": "assets/img_5a2941ebddd5.png", "skillImg": "assets/img_583958f31cbb.png"}, {"char": "陷阱大师", "skill": "大变活人", "avatar": "assets/img_5a2941ebddd5.png", "skillImg": "assets/img_e3b226ad45b0.png"}, {"char": "陷阱大师", "skill": "帽子戏法", "avatar": "assets/img_5a2941ebddd5.png", "skillImg": "assets/img_e29ac2f84104.png"}, {"char": "皮套王子", "skill": "化身！史莱姆王！", "avatar": "assets/img_af0545e22060.png", "skillImg": "assets/img_b85da012647a.png"}, {"char": "皮套王子", "skill": "进击！水晶王蟹！", "avatar": "assets/img_af0545e22060.png", "skillImg": "assets/img_b520e291f5da.png"}, {"char": "皮套王子", "skill": "降临！紫爵士！", "avatar": "assets/img_af0545e22060.png", "skillImg": "assets/img_8f8c887099ce.png"}, {"char": "博士", "skill": "电磁场装置", "avatar": "assets/img_0bd1148c791d.png", "skillImg": "assets/img_6e5880a18c67.png"}, {"char": "博士", "skill": "高能电球", "avatar": "assets/img_0bd1148c791d.png", "skillImg": "assets/img_5bb0a0a9e1b8.png"}, {"char": "博士", "skill": "量子跃迁器", "avatar": "assets/img_0bd1148c791d.png", "skillImg": "assets/img_426e1531213b.png"}, {"char": "剑宗", "skill": "疾风剑刃", "avatar": "assets/img_ec611c06bcc5.png", "skillImg": "assets/img_05a80edd8763.png"}, {"char": "剑宗", "skill": "流云飞剑", "avatar": "assets/img_ec611c06bcc5.png", "skillImg": "assets/img_6ac1db61bb84.png"}, {"char": "剑宗", "skill": "瞬步剑诀", "avatar": "assets/img_ec611c06bcc5.png", "skillImg": "assets/img_623a67e33bd8.png"}, {"char": "枪客", "skill": "斗阵枪术", "avatar": "assets/img_70fc101de0cc.png", "skillImg": "assets/img_6957864afd26.png"}, {"char": "枪客", "skill": "龙枪圣临", "avatar": "assets/img_70fc101de0cc.png", "skillImg": "assets/img_98e8f2b58082.png"}, {"char": "枪客", "skill": "陷阵枪诀", "avatar": "assets/img_70fc101de0cc.png", "skillImg": "assets/img_34c074e517ca.png"}, {"char": "领主", "skill": "战意风暴", "avatar": "assets/img_37d2218392f8.png", "skillImg": "assets/img_b2a86d26bd13.png"}, {"char": "领主", "skill": "决心猛冲", "avatar": "assets/img_37d2218392f8.png", "skillImg": "assets/img_f10b720ef628.png"}, {"char": "领主", "skill": "黑暗领主", "avatar": "assets/img_37d2218392f8.png", "skillImg": "assets/img_4a762727efbd.png"}, {"char": "咒法骑士", "skill": "能量迸涌", "avatar": "assets/img_376ca8f0f170.png", "skillImg": "assets/img_b9934d18a45b.png"}, {"char": "咒法骑士", "skill": "庇护法阵", "avatar": "assets/img_376ca8f0f170.png", "skillImg": "assets/img_87f50e1d34ed.png"}, {"char": "咒法骑士", "skill": "奥术飞弹", "avatar": "assets/img_376ca8f0f170.png", "skillImg": "assets/img_de9ac86afdc5.png"}, {"char": "占星师", "skill": "骤雨流星", "avatar": "assets/img_9b8d640453ee.png", "skillImg": "assets/img_52119f818bdd.png"}, {"char": "占星师", "skill": "命运之轮", "avatar": "assets/img_9b8d640453ee.png", "skillImg": "assets/img_fd50bc983997.png"}, {"char": "武斗家", "skill": "猛虎拳", "avatar": "assets/img_603cfca503ea.png", "skillImg": "assets/img_124bb4ffb410.png"}, {"char": "武斗家", "skill": "旋风腿", "avatar": "assets/img_603cfca503ea.png", "skillImg": "assets/img_59e9914006f0.png"}, {"char": "戏法师", "skill": "戏影剑舞", "avatar": "assets/img_784fa3790a4a.png", "skillImg": "assets/img_6312c5805972.png"}, {"char": "戏法师", "skill": "幻幕戏法", "avatar": "assets/img_784fa3790a4a.png", "skillImg": "assets/img_3e09d900606f.png"}, {"char": "吟游诗人", "skill": "音律节拍", "avatar": "assets/img_eb49a327eb03.png", "skillImg": "assets/img_7e737dddecd2.png"}, {"char": "吟游诗人", "skill": "共振乐章", "avatar": "assets/img_eb49a327eb03.png", "skillImg": "assets/img_e6654d98d7d0.png"}, {"char": "枪手", "skill": "枪神降临", "avatar": "assets/img_0f190db47686.png", "skillImg": "assets/img_bee2470b43c6.png"}, {"char": "枪手", "skill": "狩猎领域", "avatar": "assets/img_0f190db47686.png", "skillImg": "assets/img_bdd8661e94da.png"}, {"char": "机械姬", "skill": "虹烬共鸣", "avatar": "assets/img_8e1f02970f0e.png", "skillImg": "assets/img_6f2372fb7426.png"}, {"char": "船长", "skill": "炸桶派对", "avatar": "assets/img_20ae58cce3eb.png", "skillImg": "assets/img_d092e7646ac9.png"}, {"char": "船长", "skill": "冲啊！逐浪号！", "avatar": "assets/img_20ae58cce3eb.png", "skillImg": "assets/img_4fa35e5c585f.png"}, {"char": "阴阳家", "skill": "明昼拳", "avatar": "assets/img_352b7994dada.png", "skillImg": "assets/img_2f4c90eeadaf.png"}, {"char": "枪械专家", "skill": "火力增援", "avatar": "assets/img_3ad4d7b3e849.png", "skillImg": "assets/img_4dcd9fa05ecd.png"}, {"char": "厨娘", "skill": "神秘炖锅", "avatar": "assets/img_8fda2077d123.png", "skillImg": "assets/img_388249350ad4.png"}], "skins": {"骑士": [["骑士", "assets/img_c1fb4cdb2db7.gif"], ["精英骑士", "assets/img_917d88a38716.gif"], ["熔岩骑士", "assets/img_58da1dabf0d2.gif"], ["哈士骑", "assets/img_5b0f9549f6df.gif"], ["爆米花", "assets/img_080b4badc852.gif"], ["聚变核心", "assets/img_f67580278694.gif"], ["电子骑士", "assets/img_efeb52865e55.gif"], ["熊猫", "assets/img_c793817fc8ee.gif"], ["暗黑大骑士 皮肤", "assets/img_eb20fec843ee.gif"], ["饕餮", "assets/img_4efd2fe0cd4d.gif"], ["国王", "assets/img_40acc5aa81d6.gif"], ["张飞", "assets/img_d1058bfa821c.gif"], ["司铎团执事", "assets/img_69ba01edbea1.gif"], ["裁决", "assets/img_4c98b21e99cd.gif"], ["首席百夫长", "assets/img_63fadd5c3577.gif"], ["圣骑士我们走！", "assets/img_531ce78b2307.gif"], ["赤焱", "assets/img_3128c858f7b0.gif"], ["号鸟婴鸟武鸟", "assets/img_f3a62d24b778.gif"], ["二郎真君", "assets/img_c00244e75b1a.gif"], ["《骑 土》", "assets/img_d5a2872316e5.gif"], ["苍蝇座", "assets/img_0188353c12e3.gif"], ["元气奇事-草丛骑士", "assets/img_f5880c47fb3b.gif"], ["元气奇事-亚伦", "assets/img_d8a682572320.gif"], ["《骑》", "assets/img_07083f994d52.gif"], ["黄忠 字汉升", "assets/img_fe576c9867d1.gif"], ["元澜", "assets/img_2f597d8a6be7.gif"], ["肉鸽", "assets/img_2644631fc247.gif"], ["雪山大猿王 皮肤", "assets/img_f0053575da6f.gif"], ["骑蛋", "assets/img_d90de5c189c6.gif"], ["狱火审判·杰洛特", "assets/img_da210765e6b4.gif"], ["炽翼圣尊·傲天", "assets/img_8f412057a514.gif"], ["卡皮骑士巴拉", "assets/img_7351b9455644.gif"], ["电玩社·阿眠", "assets/img_a1b5d1bae4b2.gif"], ["醒狮破晓·云霄", "assets/img_855a867ee340.gif"], ["破旧的手枪", "assets/img_e7cc0ae9e2e9.gif"], ["俺的骑士", "assets/img_89fd449372b5.gif"], ["粽骑士", "assets/img_2d37c6c12713.gif"], ["D01-守门人", "assets/img_9a8fb088e16e.gif"]], "游侠": [["游侠", "assets/img_824d5210b1d3.gif"], ["幽灵", "assets/img_243cd0412f91.gif"], ["松鼠党", "assets/img_a5ddbde45aed.gif"], ["鲁道夫", "assets/img_16de29dd3d1f.gif"], ["啾啾", "assets/img_03b7e187dc5b.gif"], ["夜莺", "assets/img_e66b453c55b9.gif"], ["神秘商贩 皮肤", "assets/img_55ec89717ab7.gif"], ["应龙", "assets/img_dd75c3ec6ba6.gif"], ["立体主义", "assets/img_200959a93720.gif"], ["老鼠国王", "assets/img_6331528c390c.gif"], ["变脸", "assets/img_507c05e9cb60.gif"], ["以太枢机", "assets/img_cbc4cad6fa2b.gif"], ["老伙计", "assets/img_581360d9b0cf.gif"], ["汉谟拉比王", "assets/img_34d65595a34d.gif"], ["霓光", "assets/img_bd9dae8951c7.gif"], ["猎鹰", "assets/img_c9bfff5ffa87.gif"], ["玉龙三太子", "assets/img_22c2dc1eda43.gif"], ["《油 侠》", "assets/img_73aa93395095.gif"], ["喔喔", "assets/img_d407e7c489c2.gif"], ["双子座", "assets/img_498f7e81e396.gif"], ["双子座②", "assets/img_245a61721b03.gif"], ["元气奇事-夜莺", "assets/img_cc417a64004f.gif"], ["《侠》", "assets/img_91c92345ea69.gif"], ["刘备 字玄德", "assets/img_f56b10fd0cc1.gif"], ["夜游神 皮肤", "assets/img_c2b1ba0f9209.gif"], ["猎魔男爵·克雷顿", "assets/img_980b4168eb6d.gif"], ["Oii喵", "assets/img_d63d32924913.gif"], ["侠蛋", "assets/img_7ec60a9f3d92.gif"], ["骑士·艾雷因", "assets/img_54204621b247.gif"], ["卡皮游侠巴拉", "assets/img_0bd4753071c0.gif"], ["双锋叶影·西尔文", "assets/img_949c5038e914.gif"], ["神之使者赫尔墨斯", "assets/img_e90830159d65.gif"], ["小明小红", "assets/img_45a0ae4ba783.gif"], ["俺的游侠", "assets/img_824758d62b26.gif"], ["孔雀石", "assets/img_c3f4cc4a7539.gif"], ["滑板社·天泽", "assets/img_502a15934abc.gif"]], "法师": [["法师", "assets/img_23e6bdecf17a.gif"], ["黑暗萝莉", "assets/img_5ca056561e6b.gif"], ["图书管理员", "assets/img_5daf383b1984.gif"], ["见习法师", "assets/img_f01f40fb7b5a.gif"], ["女巫", "assets/img_7ee4fed817fd.gif"], ["春节", "assets/img_b7b31903f03f.gif"], ["拘魂者", "assets/img_be2dafb60ef8.gif"], ["大巫师 皮肤", "assets/img_da3c046c8fc2.gif"], ["夜", "assets/img_6374a89bb7f7.gif"], ["九尾狐", "assets/img_2abb80878d55.gif"], ["小红帽", "assets/img_0f04a6d7b2c4.gif"], ["穆桂英", "assets/img_036a3e1536e1.gif"], ["神圣以太教皇", "assets/img_ffa632ffb298.gif"], ["贵族技师", "assets/img_4c8fa6ca993e.gif"], ["御神子", "assets/img_0a719a1003bf.gif"], ["幻纶", "assets/img_ffff2e89df9c.gif"], ["《发 师》", "assets/img_f08be6ca7b78.gif"], ["孔雀公主", "assets/img_f8923ba4ee1b.gif"], ["琉璃珊", "assets/img_822019956ef4.gif"], ["天鹅座", "assets/img_8e7488ddf75c.gif"], ["元气奇事-宝箱法师", "assets/img_9252c4279297.gif"], ["《法》", "assets/img_8571229d9e64.gif"], ["迷雾女巫 皮肤", "assets/img_6201775b566e.gif"], ["卞玲珑", "assets/img_66effccaca94.gif"], ["古灵精怪·幽铃", "assets/img_cafdb9be2909.gif"], ["古灵精怪·幽铃②", "assets/img_9afe9aeb1fb4.gif"], ["法蛋", "assets/img_7ffa5d2738a9.gif"], ["卡皮法师巴拉", "assets/img_ece9782a685d.gif"], ["学园偶像·歌穗", "assets/img_48b5ef36483d.gif"], ["俺的法师", "assets/img_3153e0d5026d.gif"], ["虚境幻灵·艾达", "assets/img_f91a4077c026.gif"], ["焦土先知·巫娅", "assets/img_e75379e8e1f7.gif"], ["法典", "assets/img_414b57b1b39b.gif"], ["万神之祖盖亚", "assets/img_5a8dba26aa85.gif"]], "刺客": [["刺客", "assets/img_8a91b6c892dc.gif"], ["死亡小分队", "assets/img_0d2897b9dd2b.gif"], ["夜猫小分队", "assets/img_00443402888c.gif"], ["暗部", "assets/img_47ca6d0f144a.gif"], ["黑帮兔", "assets/img_72d5aa14f9e7.gif"], ["祭祀官", "assets/img_ef3864547673.gif"], ["风林火山", "assets/img_367ea037ab41.gif"], ["骷髅王 皮肤", "assets/img_11169107423c.gif"], ["狰", "assets/img_36d0309ec54c.gif"], ["胡桃夹子", "assets/img_a739ee7add44.gif"], ["伍子胥", "assets/img_ac09b142c3a5.gif"], ["银藏", "assets/img_a64044ec97a3.gif"], ["欺诈", "assets/img_d026f17839fc.gif"], ["波斯王子", "assets/img_32ab6af560ca.gif"], ["南十字星", "assets/img_0f89c0881801.gif"], ["ヾ⁠( ° ∀ ° )⁠ﾉ”", "assets/img_7dbea7e61187.gif"], ["六耳猕猴", "assets/img_7b1922637bda.gif"], ["《刺 克》", "assets/img_1be18b4046b2.gif"], ["琥珀川", "assets/img_e50cb5451d2e.gif"], ["天蝎座", "assets/img_437c9f9b82fd.gif"], ["吕布 字奉先", "assets/img_4dbb0334ff10.gif"], ["吕布 字奉先②", "assets/img_901874da7426.gif"], ["元气奇事-风林火山", "assets/img_fb13e611aa39.gif"], ["《刺》", "assets/img_918fee47adbf.gif"], ["深渊潜航者 皮肤", "assets/img_701407e32e56.gif"], ["刺蛋", "assets/img_b6e53a489955.gif"], ["卡皮刺客巴拉", "assets/img_180d3a511296.gif"], ["海神波塞冬", "assets/img_305585589776.gif"], ["海神波塞冬②", "assets/img_977a355f21fb.gif"], ["黯乐寅主·阿什尔", "assets/img_bdacb0eabfde.gif"], ["血刃", "assets/img_c34211cf89f6.gif"], ["俺的刺客", "assets/img_1d203de009c1.gif"], ["烬海神誓·赤衡", "assets/img_9462a17a95f6.gif"]], "炼金术士": [["炼金术士", "assets/img_84500d235dbb.gif"], ["唱片术士", "assets/img_c16bb30c516b.gif"], ["圣诞老人 红", "assets/img_21c3089cffa0.gif"], ["财神爷", "assets/img_5a63c36281a3.gif"], ["鸟嘴医生", "assets/img_b62d9304a1d8.gif"], ["瓦克恩头目 皮肤", "assets/img_8350ad0997ff.gif"], ["獓因", "assets/img_9abe728fb077.gif"], ["刑罚", "assets/img_beb167096ddb.gif"], ["包青天", "assets/img_012be24f9c65.gif"], ["猛毒鱼人", "assets/img_e4731fe62507.gif"], ["阿兹台克祭祀长", "assets/img_44d724054a63.gif"], ["茉茉", "assets/img_88425d082e95.gif"], ["琵琶仙", "assets/img_3fc685f11ad6.gif"], ["《炼 金 木 土》", "assets/img_e97c4d93244c.gif"], ["哭哭柠", "assets/img_7f2a7949d930.gif"], ["金牛座", "assets/img_81592350abb8.gif"], ["左慈 字元放", "assets/img_8a924bd91882.gif"], ["《金》", "assets/img_a1cc8e997721.gif"], ["巫婆", "assets/img_0b3bda5ec1e9.gif"], ["实验员·叶梨", "assets/img_51707a71d20b.gif"], ["金蛋", "assets/img_0a30c1386904.gif"], ["元素学者·莉兹", "assets/img_c31fd8abaeab.gif"], ["卡皮炼金术士巴拉", "assets/img_e0e3c2be7d56.gif"], ["赤涛残火·霍克", "assets/img_3397f48fda27.gif"], ["休眠的毒泡泡泵", "assets/img_7982264add88.gif"], ["守穗人·谷棘", "assets/img_6ff158a00ba2.gif"], ["俺的炼金术士", "assets/img_c5cf31dda494.gif"], ["蛇纹石", "assets/img_4864c571b769.gif"]], "枪械专家": [["枪械专家", "assets/img_67b26521fc0c.gif"], ["秘灵契主·珀莉", "assets/img_84b036460599.gif"], ["械蛋", "assets/img_0af2cc21672e.gif"], ["械舞阵列·火花", "assets/img_bde1e5610c9f.gif"], ["编号041", "assets/img_1a05f4fec49b.gif"], ["俺的枪械专家", "assets/img_359f8216fa4d.gif"], ["C41-焱焱", "assets/img_c1d8e8d45d8b.gif"]], "厨娘": [["厨娘", "assets/img_3a82bfb5e427.gif"], ["锅铲", "assets/img_a8af16673d56.gif"], ["桃斩", "assets/img_72b24b40f3b3.gif"], ["俺的厨娘", "assets/img_7c9300e5a0da.gif"]], "工程师": [["工程师", "assets/img_8e5ea098ae4b.gif"], ["魔改后工程师", "assets/img_2185e91e27fc.gif"], ["原型机", "assets/img_3fd08f90d09b.gif"], ["孔明灯", "assets/img_fd646f0b9ff9.gif"], ["温泉蛋", "assets/img_114e2b677c00.gif"], ["投币式乐队机器人♯1", "assets/img_d549a5524136.gif"], ["世界你好", "assets/img_10edf80c25b8.gif"], ["镭射幽浮 皮肤", "assets/img_79cf4e75aca5.gif"], ["皇天", "assets/img_7a7b0498cab4.gif"], ["驱邪", "assets/img_b39a8b5f644b.gif"], ["项羽", "assets/img_90f73cabf655.gif"], ["行为怪诞的小丑", "assets/img_31b64a6996de.gif"], ["罐装大王", "assets/img_beed4b2d21b1.gif"], ["古祖铸铜者", "assets/img_985356edfbe8.gif"], ["伪装战甲", "assets/img_a58c0a4c5b25.gif"], ["欧博士", "assets/img_462f00429047.gif"], ["《工 呈 师》", "assets/img_3fffca766132.gif"], ["紫金红葫芦", "assets/img_9c63e6fb710b.gif"], ["水瓶座", "assets/img_980fecca5afb.gif"], ["华佗 字元化", "assets/img_29e698046d29.gif"], ["《程》", "assets/img_a9e0541832ba.gif"], ["凹凸蓝", "assets/img_ad66dbd8e026.gif"], ["程蛋", "assets/img_5639ec3938d0.gif"], ["发明社·亨利", "assets/img_cfbae61dcd2d.gif"], ["卡皮工程师巴拉", "assets/img_1de20a044697.gif"], ["嗒啦啦和伙伴们", "assets/img_73d23709517f.gif"], ["程序猿", "assets/img_a5c31060cdd9.gif"], ["孤械永契·余烬", "assets/img_00ac04a64cd0.gif"], ["欠欠时代冲锋枪", "assets/img_8be4f72780f4.gif"], ["赤红潮汐·巴里", "assets/img_09af515390ee.gif"], ["俺的工程师", "assets/img_153baee26767.gif"]], "吸血鬼": [["吸血鬼", "assets/img_a9fdc3c501f0.gif"], ["血伯爵", "assets/img_5de66e2dbca1.gif"], ["警长", "assets/img_8baa543861e9.gif"], ["真 吸血鬼", "assets/img_1a741bd722f3.gif"], ["杰克南瓜", "assets/img_4098b934811e.gif"], ["白无常", "assets/img_e1b9deeb6874.gif"], ["银爵", "assets/img_b7469015ef4b.gif"], ["幽灵王 皮肤", "assets/img_32af9c99c167.gif"], ["梼杌", "assets/img_08d273a46179.gif"], ["范无救与谢必安", "assets/img_0461deb848f1.gif"], ["范无救与谢必安②", "assets/img_83979ddb6f21.gif"], ["湮灭", "assets/img_dbdc6f08ef21.gif"], ["夜魔女莉莉丝", "assets/img_46e58ce6e7a2.gif"], ["猩红", "assets/img_5c5942a2e873.gif"], ["晶晶", "assets/img_a307cfaaef8e.gif"], ["《口及 血 鬼》", "assets/img_69c7edecf2aa.gif"], ["乌鸦座", "assets/img_60e328c474ef.gif"], ["司马懿 字仲达", "assets/img_4a3b54cb3388.gif"], ["《鬼》", "assets/img_392f2b4b0039.gif"], ["商尊", "assets/img_6e60005e0cde.gif"], ["学生会长·桃子", "assets/img_90730bedfc66.gif"], ["鬼蛋", "assets/img_98a94438c54d.gif"], ["红影裁决·维恩", "assets/img_b07e2b104940.gif"], ["卡皮吸血鬼巴拉", "assets/img_a061e0ab0936.gif"], ["蜘蛛胡椒", "assets/img_e9ab77463928.gif"], ["俺的吸血鬼", "assets/img_c40af2534e09.gif"], ["鲜血酒杯", "assets/img_62e9d3d6d451.gif"], ["R07-夜钥", "assets/img_7d9757b8a5dd.gif"]], "精灵": [["精灵", "assets/img_e42daf26297a.gif"], ["恢复", "assets/img_e21e8ba5e497.gif"], ["冰雪女王", "assets/img_0904df3c89e8.gif"], ["嫦娥", "assets/img_50f7b9e99490.gif"], ["嗒啦啦", "assets/img_5e72f4a474ce.gif"], ["巡林者", "assets/img_269069203380.gif"], ["曼陀罗魔花 皮肤", "assets/img_8cf1155ee66d.gif"], ["毕方", "assets/img_49875f93e38f.gif"], ["糖梅仙子", "assets/img_c36f40763829.gif"], ["黄忠", "assets/img_53a802921d00.gif"], ["人鱼公主", "assets/img_115d6c1da92c.gif"], ["奥林匹斯山的月光", "assets/img_d45b0dcb0c25.gif"], ["闪回", "assets/img_e368e07b757e.gif"], ["杏仙", "assets/img_4e8a74c97ba7.gif"], ["《晶 灵》", "assets/img_5a55d366dcbd.gif"], ["射手座", "assets/img_0a872d3e2ff2.gif"], ["《精》", "assets/img_713dfd3a87dd.gif"], ["星奈", "assets/img_c99b31945423.gif"], ["步练师", "assets/img_7cde7650493e.gif"], ["体育生·柚希", "assets/img_1081396c09e1.gif"], ["精蛋", "assets/img_35f1b8c09be5.gif"], ["云裳灵羽·琉璃", "assets/img_3b6935c4939d.gif"], ["卡皮精灵巴拉", "assets/img_96f91c3297c3.gif"], ["月神阿尔忒弥斯", "assets/img_ebf4a0b4cdc9.gif"], ["潮音猎手·芷汐", "assets/img_347360de01cc.gif"], ["俺的精灵", "assets/img_05c12db06f88.gif"], ["古老的弓", "assets/img_3b4a166fbd85.gif"], ["械舞阵列·铳岚", "assets/img_0b54449aab73.gif"]], "圣骑士": [["圣骑士", "assets/img_8c042c536518.gif"], ["魔龙骑士", "assets/img_5cab219bc390.gif"], ["工业化", "assets/img_0f65ac5f08e9.gif"], ["圣诞老人 绿", "assets/img_9ca909476178.gif"], ["增长天王", "assets/img_62d0ec30237f.gif"], ["守护骑士", "assets/img_c3714849be83.gif"], ["银翼骑士团", "assets/img_5e897949f429.gif"], ["大骑士 皮肤", "assets/img_0ed14175c7df.gif"], ["苦", "assets/img_8cf04f3d436e.gif"], ["帝江", "assets/img_a9b0a2153cd6.gif"], ["关羽", "assets/img_1df036445653.gif"], ["司铎团之鞭", "assets/img_69089dd3b071.gif"], ["人鱼统领", "assets/img_080e0c9d45d9.gif"], ["锈蚀战甲", "assets/img_e5dd438b28e8.gif"], ["斯巴达战士", "assets/img_e9f8a996dd1f.gif"], ["白钢", "assets/img_9ab0f613e053.gif"], ["猪悟能", "assets/img_97b0f00a4434.gif"], ["《圣 骑 土》", "assets/img_33f89adaf286.gif"], ["湍流枫", "assets/img_a4852f8bdc0e.gif"], ["盾牌座", "assets/img_4fa87093482f.gif"], ["《圣》", "assets/img_362e3e5c1504.gif"], ["许褚 字仲康", "assets/img_e4930adf7316.gif"], ["西西红柿", "assets/img_8201790714f6.gif"], ["圣蛋", "assets/img_eb636dd7b924.gif"], ["地狱之斧·格雷戈", "assets/img_defb6cf4f10b.gif"], ["卡皮圣骑士巴拉", "assets/img_6b04855ef8e2.gif"], ["海焰战姬·希格", "assets/img_90e58af39f87.gif"], ["俺的圣骑士", "assets/img_c8f7dff6f301.gif"], ["神圣连枷", "assets/img_fddef02312d1.gif"], ["太阳神阿波罗", "assets/img_a66b724f2814.gif"], ["二维马", "assets/img_562ce4db45f1.gif"]], "狼人": [["狼人", "assets/img_ccd56d3e6a82.gif"], ["钢铁战狼", "assets/img_aa352195d61d.gif"], ["熊孩子", "assets/img_a22a5cb2ce7c.gif"], ["齐天大圣", "assets/img_5ec1fd1a71ca.gif"], ["海公公", "assets/img_3cd0781fb584.gif"], ["小虎队", "assets/img_f838a7ac57b9.gif"], ["彩蛋", "assets/img_e812fa213dea.gif"], ["美洲豹", "assets/img_0eda106321ae.gif"], ["火焰地狱契约", "assets/img_b09e39a64183.gif"], ["水晶巨蟹 皮肤", "assets/img_d805d466dbe0.gif"], ["穷奇", "assets/img_2aa6abfb4aca.gif"], ["豆娃", "assets/img_6f1328524d23.gif"], ["和蔼的外婆", "assets/img_06a5d12826c2.gif"], ["哪吒", "assets/img_76bb1094d6b6.gif"], ["天狼", "assets/img_750e88f8102f.gif"], ["北风熊灵", "assets/img_d04a1636dc53.gif"], ["惊骇", "assets/img_654042d70817.gif"], ["大力牛魔王", "assets/img_f248acae2d1d.gif"], ["《狼 入》", "assets/img_daf71f70cfab.gif"], ["巨蟹座", "assets/img_d022aae6fb8e.gif"], ["张飞 字益德", "assets/img_638ed4f0887f.gif"], ["《狼》", "assets/img_9a91da772311.gif"], ["螂人", "assets/img_e214842e0694.gif"], ["肌肉驯鹿", "assets/img_9ce414446b28.gif"], ["漆夜猎手·格雷森", "assets/img_e60c9ad8c735.gif"], ["狼蛋", "assets/img_6e27c194a0a1.gif"], ["卡皮狼人巴拉", "assets/img_e8edbec2a877.gif"], ["失去伪装的面具熊", "assets/img_8ec6c3851186.gif"], ["蚀月魔狼 皮肤", "assets/img_577a79125d15.gif"], ["高雅的企鹅", "assets/img_c4509cca99e6.gif"], ["俺的狼人", "assets/img_3332c9a38f6a.gif"], ["霜银狼王·凛风", "assets/img_981d029b9b4e.gif"], ["灼热爪刃", "assets/img_45b6ef1414d2.gif"], ["厨师·大满", "assets/img_9825e846c645.gif"]], "牧师": [["牧师", "assets/img_0a6a29a54317.gif"], ["教会", "assets/img_5fb09c4dcdcd.gif"], ["红衣教主", "assets/img_6e30864db19d.gif"], ["兔兔", "assets/img_838ec2d4ee4e.gif"], ["天国巡音", "assets/img_4513c03c5dae.gif"], ["阿努比斯 皮肤", "assets/img_84e94cbef025.gif"], ["露", "assets/img_1b6a15bf94f6.gif"], ["猼訑", "assets/img_29cb48c29410.gif"], ["医师", "assets/img_f37446e25401.gif"], ["漫游仙境", "assets/img_85625b96e1b8.gif"], ["白蛇", "assets/img_0d2c849b338e.gif"], ["日蚀", "assets/img_a6e8449b5340.gif"], ["飞天", "assets/img_2b01fbb0b0d5.gif"], ["爪爪", "assets/img_b54975c55096.gif"], ["圣洁", "assets/img_f09e7cac2300.gif"], ["转世金蝉", "assets/img_bfdea319c6c4.gif"], ["《目 师》", "assets/img_822e985f64ca.gif"], ["处女座", "assets/img_189d3475c8b5.gif"], ["《牧》", "assets/img_756485e2ce0a.gif"], ["蔡文姬", "assets/img_ba5d6dd1251f.gif"], ["辉洁星使·伊丽莎白", "assets/img_fbb2be5717a8.gif"], ["牧蛋", "assets/img_b1c5d7b4ec77.gif"], ["桂语·梦柔柔", "assets/img_c396b27974e5.gif"], ["卡皮牧师巴拉", "assets/img_b41e594db8fc.gif"], ["校医室·云蓁", "assets/img_85ee035df290.gif"], ["爱神阿芙洛狄忒", "assets/img_fc17523f352a.gif"], ["腐壤医者·鸦", "assets/img_58e69b89cc15.gif"], ["俺的牧师", "assets/img_1921d485a36a.gif"], ["木制十字架", "assets/img_58b9e0d7324d.gif"], ["恒我", "assets/img_b48246cf41d0.gif"], ["渊心仁术·藻", "assets/img_cd37626bb92b.gif"]], "德鲁伊": [["德鲁伊", "assets/img_6ec504eacdfd.gif"], ["先知", "assets/img_49d6787e32e5.gif"], ["上班族", "assets/img_63adabb5e81b.gif"], ["驯鹿", "assets/img_c57c4679e734.gif"], ["龙王", "assets/img_244dfaf7123d.gif"], ["霜烬", "assets/img_819347b32b82.gif"], ["年兽 皮肤", "assets/img_bdb2f5abeb85.gif"], ["白泽", "assets/img_7698d74766fe.gif"], ["诸葛亮", "assets/img_c539c460ece3.gif"], ["可怖的驯兽师", "assets/img_03613dd3d2b8.gif"], ["大发明家", "assets/img_334f847699c0.gif"], ["神鹿", "assets/img_5e3041e630db.gif"], ["悖论", "assets/img_1631f0262031.gif"], ["我不是德鲁伊", "assets/img_36d0bdee2e4a.gif"], ["鹿力大仙", "assets/img_56a225bc1116.gif"], ["《德 鲁 尹》", "assets/img_96511e5e307b.gif"], ["摩羯座", "assets/img_738d3f4085dc.gif"], ["祝融姊姊", "assets/img_34ac54957064.gif"], ["《德》", "assets/img_3ef9eaedd6a2.gif"], ["唐吟", "assets/img_603cb550168b.gif"], ["风纪·爱丽丝", "assets/img_921c04fb5dcb.gif"], ["德蛋", "assets/img_d5b98def584b.gif"], ["花蝶仙姬·洛芙蕾", "assets/img_f1a7917bc35e.gif"], ["卡皮德鲁伊巴拉", "assets/img_cc624ff7ecb8.gif"], ["森灵秘使·古司", "assets/img_ae1b314ec46c.gif"], ["俺的德鲁伊", "assets/img_6b52dc1a17ce.gif"], ["牧神潘", "assets/img_aa018b7734dd.gif"], ["树妖王 皮肤", "assets/img_25364f9bd3b7.gif"], ["嘎嘣脆的骨头", "assets/img_813e0bc6b904.gif"], ["聆潮人·汐谣", "assets/img_d5a191add1c9.gif"]], "机器人": [["机器人", "assets/img_d2a601c4e19b.gif"], ["荒野机甲", "assets/img_326dafccd5b5.gif"], ["十以内加减法专用机器人", "assets/img_a46e7950abeb.gif"], ["末日科技实验体", "assets/img_f14d045f0634.gif"], ["巨像 祖兰 皮肤", "assets/img_2d3131cc3dbc.gif"], ["9102", "assets/img_4794d84a5d3e.gif"], ["女娲", "assets/img_314ca1129b3a.gif"], ["治疫", "assets/img_9bce7789b87d.gif"], ["投币式乐队机器人♯2", "assets/img_9a6fb2564e97.gif"], ["虞机", "assets/img_7df10c313afb.gif"], ["咯咯作响的提线木偶", "assets/img_05b5d1789480.gif"], ["瓶中之灵", "assets/img_382b13747ba4.gif"], ["摩艾石像", "assets/img_da4f8aa52c36.gif"], ["破坏炮", "assets/img_9e82f0d3f2c6.gif"], ["奔波儿灞", "assets/img_088e2c085fd2.gif"], ["《鸡 器 人》", "assets/img_f731b59847a0.gif"], ["望远镜座", "assets/img_d3bcd6d8dc39.gif"], ["元气奇事-自爆机器人", "assets/img_21c8422ded95.gif"], ["《器》", "assets/img_4386032269a3.gif"], ["庞统 字士元", "assets/img_db534673c5fc.gif"], ["机蛋", "assets/img_03e473cab9fc.gif"], ["最强学生·奇宇", "assets/img_3bd154ac80c2.gif"], ["卡皮机器人巴拉", "assets/img_0a1e558908a9.gif"], ["缄默的半成品·X", "assets/img_ffd47d3f6129.gif"], ["卫星浮游炮", "assets/img_d2542d9f6e63.gif"], ["俺的机器人", "assets/img_3b28ed5d9049.gif"], ["青铜巨人塔罗斯", "assets/img_18af435ee401.gif"]], "狂战士": [["狂战士", "assets/img_62bacfacfbcd.gif"], ["摔跤大师", "assets/img_84fbcbfca3fa.gif"], ["狂乱的制裁之拳", "assets/img_f0aba11a3a37.gif"], ["丧尸", "assets/img_86b58518f4a6.gif"], ["无头骑士 皮肤", "assets/img_7f8b5a41f697.gif"], ["龙的传人", "assets/img_ed1a42718d2e.gif"], ["思", "assets/img_2147e48a5295.gif"], ["䑏疏", "assets/img_0dbcfa0713c3.gif"], ["公正", "assets/img_ec422f022bbd.gif"], ["权虎鹰", "assets/img_a29a8a150e9d.gif"], ["皇帝的新衣", "assets/img_cf38adaada57.gif"], ["武松", "assets/img_4f86e349da6c.gif"], ["海马斗士", "assets/img_40059d210655.gif"], ["钢铁焚化者", "assets/img_3fc24833d84a.gif"], ["维京王", "assets/img_1e88b4b07337.gif"], ["雷暴", "assets/img_b5bb46b5f23e.gif"], ["利爪", "assets/img_d4a46b9415df.gif"], ["《狂 战 土》", "assets/img_f9dadd8d7222.gif"], ["金翅大鹏雕", "assets/img_b970ab5296fc.gif"], ["岩祖 皮肤", "assets/img_2b9432cb2251.gif"], ["狮子座", "assets/img_93610c730e3d.gif"], ["《狂》", "assets/img_8271e2c11f5a.gif"], ["关羽 字云长", "assets/img_dca438a1925f.gif"], ["关羽 字云长②", "assets/img_8c05a2f52325.gif"], ["逐日者·乔尼", "assets/img_5fdb3c3bfa7f.gif"], ["狂蛋", "assets/img_84ecdb87107c.gif"], ["卡皮狂战士巴拉", "assets/img_bdff78c0d463.gif"], ["冲浪社·凌涛", "assets/img_f6e61d352560.gif"], ["勇士阿喀琉斯", "assets/img_e4ba166ac447.gif"], ["俺的狂战士", "assets/img_f9fe50a7bfd1.gif"], ["拳套", "assets/img_757f6298629c.gif"], ["鹿鸣金胄·钧天", "assets/img_fd9f4f0abc3b.gif"], ["藏宝钩手·巴罗", "assets/img_57f260eb35cf.gif"], ["哞哞", "assets/img_4225ef590021.gif"]], "死灵法师": [["死灵法师", "assets/img_cbb03062663c.gif"], ["彩蛋兔皮肤", "assets/img_81892ee2218a.gif"], ["狂热信徒", "assets/img_f78b7223afdc.gif"], ["特技车手", "assets/img_1adabdcec029.gif"], ["陆吾", "assets/img_7e76645c999b.gif"], ["青蛇", "assets/img_b2f118f447c5.gif"], ["新月", "assets/img_fdf27b980756.gif"], ["猫神芭丝特", "assets/img_03cb1f230502.gif"], ["极光", "assets/img_4bd49567cd1d.gif"], ["冷月", "assets/img_407887146ad2.gif"], ["波丝", "assets/img_ce44826e378a.gif"], ["《死 灵 发 师》", "assets/img_6ae8b700f6d8.gif"], ["仙后座", "assets/img_495a2e4020ff.gif"], ["小幽", "assets/img_d04157f30449.gif"], ["貂蝉", "assets/img_7a5d4d036f0e.gif"], ["《灵》", "assets/img_0042acfe70ac.gif"], ["咲莉", "assets/img_6c32a5bdfd76.gif"], ["手机党·小梦", "assets/img_d3fb35f84f5a.gif"], ["灵蛋", "assets/img_dd63d5e1b773.gif"], ["卡皮死灵法师巴拉", "assets/img_f5ad16875935.gif"], ["奇迹乐章·奏", "assets/img_863d2a44833a.gif"], ["橘焰魔眼·薇拉", "assets/img_0db59bf2aefc.gif"], ["俺的死灵法师", "assets/img_b29015d8c8e9.gif"], ["珠澜贝主·铂尔", "assets/img_101ae6bb39b0.gif"], ["瘟疫之杖", "assets/img_38f06fc02723.gif"], ["青鳞袭香·云螭", "assets/img_1e57ad065594.gif"], ["红宝石", "assets/img_f1a561aa116a.gif"]], "警官": [["警官", "assets/img_3c10b6196f6e.gif"], ["4亿探长", "assets/img_4cf76c1ea656.gif"], ["锦衣卫", "assets/img_339cb88300fa.gif"], ["吸血鬼猎人", "assets/img_6a317230f335.gif"], ["钟馗", "assets/img_1797125c7ef2.gif"], ["金面猴王 皮肤", "assets/img_a29e4e0b95d5.gif"], ["幽灵船长", "assets/img_dc3b8d636605.gif"], ["贵族警督", "assets/img_ae4d920f9f27.gif"], ["法老王", "assets/img_523f51a6d9a6.gif"], ["法槌", "assets/img_0c9c09c4ca21.gif"], ["《警 关》", "assets/img_573913c3355e.gif"], ["托塔天王", "assets/img_3d319c5ca4e3.gif"], ["羊马它", "assets/img_5a1c6636ace4.gif"], ["天秤座", "assets/img_d304e8b4ed2c.gif"], ["马超 字孟起", "assets/img_836aaa1ef7f9.gif"], ["《警》", "assets/img_073c89f2d9b9.gif"], ["凹凸红", "assets/img_298fb40c5d11.gif"], ["赤色暴君·里昂", "assets/img_eb906fd07503.gif"], ["警蛋", "assets/img_a50a205d9b95.gif"], ["卡皮警官巴拉", "assets/img_59421b58ad5c.gif"], ["狱海提督·迪伦", "assets/img_de22b19f4a2a.gif"], ["棒球社·道奇", "assets/img_b75e5e72c3c9.gif"], ["罪恶克星", "assets/img_64a769c66fb9.gif"], ["俺的警官", "assets/img_db616de4fd62.gif"], ["众神之王宙斯", "assets/img_228d073c038d.gif"]], "道士": [["道士", "assets/img_af91c8ea0184.gif"], ["律法", "assets/img_640a100a8303.gif"], ["驱魔道人", "assets/img_3403ab1faa72.gif"], ["天君", "assets/img_3d31563695cf.gif"], ["太上老君", "assets/img_5a37aec7e3cb.gif"], ["哥布林祭师 皮肤", "assets/img_1af5d964a3cf.gif"], ["鬼鬼祟祟的魔术师", "assets/img_1b4f92848909.gif"], ["雷霆", "assets/img_6fd8bc8333ad.gif"], ["蒸汽符师", "assets/img_553a9b40e886.gif"], ["描仙郎", "assets/img_d4a9be72962a.gif"], ["汐羽", "assets/img_1bf7cc54aa82.gif"], ["《道 土》", "assets/img_3f25385b8f95.gif"], ["双鱼座", "assets/img_c4ea90cffc95.gif"], ["波子", "assets/img_3648cd31b1fa.gif"], ["《道》", "assets/img_56cf52f2711f.gif"], ["陆逊 字伯言", "assets/img_da3664a8cc3c.gif"], ["不是，哥们", "assets/img_26520fe1fa18.gif"], ["学霸·思辰", "assets/img_4b6dd7bf1a4a.gif"], ["道蛋", "assets/img_eb2da0cfd490.gif"], ["教主·浮士德", "assets/img_e4377375a110.gif"], ["卡皮道士巴拉", "assets/img_9624af2bfaa9.gif"], ["尖齿主厨·布鲁斯", "assets/img_66081bd53c04.gif"], ["道剑", "assets/img_1b6561ab2740.gif"], ["俺的道士", "assets/img_da5e2838c35e.gif"], ["蔽目掩锋·萨维尔", "assets/img_e852d59f131a.gif"], ["翡翠", "assets/img_ac3c97d8b576.gif"]], "古代元素使": [["古代元素使", "assets/img_acd412f9bcff.gif"], ["千梦沉渊·黛澜", "assets/img_7c785df60e6d.gif"], ["元蛋", "assets/img_319f0defd793.gif"], ["元能之相", "assets/img_5cfb4e6f8eaf.gif"], ["俺的古代元素使", "assets/img_2ac3456a8654.gif"]], "超界者": [["超界者", "assets/img_4e91e7e63b9d.gif"], ["冥王哈迪斯", "assets/img_7de975806a6b.gif"], ["超蛋", "assets/img_f891d0b5a7e2.gif"], ["卡皮超界者巴拉", "assets/img_0ca354ffd4ee.gif"], ["次元之握", "assets/img_e96d29a3b1aa.gif"], ["喜悟星寰·蔚", "assets/img_b56b1848d68a.gif"], ["俺的超界者", "assets/img_92defdbb5d8f.gif"]], "枭首者": [["枭首者", "assets/img_89e33bb1b495.gif"]], "气宗": [["气宗", "assets/img_79fc67c166ec.gif"], ["魔道巨擘", "assets/img_893cee049f73.gif"], ["阿箔", "assets/img_b0f24211fe2d.gif"], ["空", "assets/img_d9d36c860544.gif"], ["《汽 宗》", "assets/img_b7701885e8fa.gif"], ["罗盘座", "assets/img_c6c0df13cc2e.gif"], ["机械皇帝 皮肤", "assets/img_bac69276bd84.gif"], ["《气》", "assets/img_5b4b87e5ff69.gif"], ["夏侯惇 字元让", "assets/img_c54d30c60c0a.gif"], ["气蛋", "assets/img_a048ce668957.gif"], ["武术队·李云飞", "assets/img_b80d5822c125.gif"], ["苍风掠霄·岚枭", "assets/img_aaa45634323b.gif"], ["卡皮气宗巴拉", "assets/img_7e589b43757b.gif"], ["银霆破晓·艾瑟尔", "assets/img_79533123835b.gif"], ["天地通意拳", "assets/img_9920cc4e5591.gif"], ["俺的气宗", "assets/img_bd8d0261c5b6.gif"], ["藏怒燎原·灼野", "assets/img_992d7c4f4396.gif"], ["黯痕拳煞·柯恩", "assets/img_64d837c344d9.gif"]], "恶魔术士": [["恶魔术士", "assets/img_4101b9ed8538.gif"], ["咬咬", "assets/img_5e81b03d20e5.gif"], ["被恶魔侵蚀的女孩", "assets/img_d1782fd7e004.gif"], ["《我 真 可 爱！》", "assets/img_0c914368a1e6.gif"], ["圣婴大王", "assets/img_8a47d7908afe.gif"], ["小熊座与大熊座", "assets/img_94e79d8908f8.gif"], ["《魔》", "assets/img_c9b9c7478b60.gif"], ["小乔", "assets/img_5f223df1635d.gif"], ["混沌魔王·暗月", "assets/img_506d05306a35.gif"], ["魔蛋", "assets/img_c9a7d9236622.gif"], ["卡皮恶魔术士巴拉", "assets/img_2ec67070cac6.gif"], ["园艺社·艾茵", "assets/img_5253a908337f.gif"], ["浮游绮梦·玛丽娜", "assets/img_46a540f099cb.gif"], ["俺的恶魔术士", "assets/img_3f0242cbeab5.gif"], ["暗星之钥", "assets/img_f6995cc0b6ae.gif"], ["哀渡星河·银珠", "assets/img_1bbd4ba85148.gif"], ["翠榴石", "assets/img_0668963b1456.gif"], ["断羽祭者·小鸦", "assets/img_b06ae364dea9.gif"]], "矿工": [["矿工", "assets/img_b211dccf436d.gif"], ["玉兔", "assets/img_193a5dc3df6b.gif"], ["《旷 工》", "assets/img_a0c3e65dc4f9.gif"], ["兰琪琪", "assets/img_f848b4cdd719.gif"], ["鲸鱼座", "assets/img_92b2b03645e3.gif"], ["掘金骑手", "assets/img_4b136678eeca.gif"], ["大乔", "assets/img_b23c26926b35.gif"], ["《矿》", "assets/img_4a2fdc076398.gif"], ["蜜糖", "assets/img_ff3dcfba1dbc.gif"], ["凹凸粉", "assets/img_d2309a1c41cf.gif"], ["火山沙虫 皮肤", "assets/img_ae7db7beb4b9.gif"], ["甜心公主·安洁丽卡", "assets/img_3c3dcc919ea5.gif"], ["矿蛋", "assets/img_94c5c4bcbd04.gif"], ["卡皮矿工巴拉", "assets/img_a1fa96750acd.gif"], ["夏憩·月绵绵", "assets/img_1d71cfce4914.gif"], ["骑行社·莉悠", "assets/img_6bad304be3e8.gif"], ["狂浪锚歌·浪芽", "assets/img_f7956a633995.gif"], ["铁镐", "assets/img_eab6fc4cb683.gif"], ["俺的矿工", "assets/img_6206c6fc8fa0.gif"], ["M25-岩芽", "assets/img_f631539d7885.gif"]], "特种骑士部队": [["特种骑士部队", "assets/img_c00f3ea53925.gif"], ["俺的特种骑士部队", "assets/img_0f43ce1ff405.gif"], ["特种作战武器", "assets/img_d9b16a0f52e7.gif"], ["复仇女神厄里倪厄斯", "assets/img_18cc4cb7fd11.gif"]], "超时空忍者": [["超时空忍者", "assets/img_8fb2d29256c4.gif"], ["青空之翼·鸢", "assets/img_5e4a6021f2b4.gif"], ["忍蛋", "assets/img_8719a728f143.gif"], ["卡皮超时空忍者巴拉", "assets/img_2378cf4ec3fa.gif"], ["沙海魅影·莎夜", "assets/img_5dfd2e5c605a.gif"], ["分子一文字", "assets/img_6ec33fb0d269.gif"], ["怒烬灼华·黛娥", "assets/img_4176af31dd87.gif"], ["俺的超时空忍者", "assets/img_84d584aa58bc.gif"]], "陷阱大师": [["陷阱大师", "assets/img_6e0248c212a1.gif"], ["阎魔王", "assets/img_3cc3999361f3.gif"], ["《馅 阱 大 师》", "assets/img_ca11fc64b520.gif"], ["白羊座", "assets/img_2a3f75d66daf.gif"], ["厚礼", "assets/img_3e90d1af20e3.gif"], ["《陷》", "assets/img_2666f216973c.gif"], ["星算子", "assets/img_cd3c8c796434.gif"], ["孙权 字仲谋", "assets/img_a3c4c56c388a.gif"], ["陷蛋", "assets/img_a063a362e2cf.gif"], ["万灵戏法·杰克", "assets/img_40b2338a9e5e.gif"], ["卡皮陷阱大师巴拉", "assets/img_19da783b2104.gif"], ["生物社·池沼", "assets/img_7e74a7351456.gif"], ["俺的陷阱大师", "assets/img_52bdb795e5aa.gif"], ["勾索枪", "assets/img_213a49200ab8.gif"]], "皮套王子": [["皮套王子", "assets/img_691f0ba8f97a.gif"], ["欧博士的火箭（低配版）", "assets/img_cc8c7c515a51.gif"], ["苹果喵", "assets/img_44740beecf88.gif"], ["沙和尚", "assets/img_be58a64bb530.gif"], ["《皮 套 王 孒》", "assets/img_9764c103428b.gif"], ["《皮》", "assets/img_c6323086be8d.gif"], ["大家饿少女", "assets/img_7a20bb9acadd.gif"], ["南瓜公爵", "assets/img_cfd62893f87b.gif"], ["蝘蜓座", "assets/img_99701b981ef0.gif"], ["皮蛋", "assets/img_c94c3222d30f.gif"], ["国王·诺亚", "assets/img_242a1eb80716.gif"], ["美术社·墨彩", "assets/img_fc0356fa4b53.gif"], ["卡皮皮套王子巴拉", "assets/img_352786934bcf.gif"]], "博士": [["博士", "assets/img_691c317a07a9.gif"], ["高级指挥官", "assets/img_0d7f5570b045.gif"], ["《博 土》", "assets/img_f3e808406215.gif"], ["《博》", "assets/img_1e18f09c2ba8.gif"], ["罗刹姬", "assets/img_fc703adae3d0.gif"], ["甄姬", "assets/img_3e26f5a9bb7c.gif"], ["花舞", "assets/img_4778b4d7c4dd.gif"], ["博蛋", "assets/img_229baaa465af.gif"], ["蝠翼冥冠·卡蜜拉", "assets/img_bde270466ca6.gif"], ["卡皮博士巴拉", "assets/img_8133f565d09b.gif"], ["智慧女神雅典娜", "assets/img_706b7c27eac8.gif"], ["离子激发枪", "assets/img_4cee74baac59.gif"], ["喜纳天音·朵芙", "assets/img_16a7a927095c.gif"], ["俺的博士", "assets/img_d085dc797c35.gif"]], "枪客": [["枪客", "assets/img_e8fb02e4fb59.gif"], ["赵云 字子龙", "assets/img_9000af039c34.gif"], ["《仓 客》", "assets/img_5f2481279d03.gif"], ["《枪》", "assets/img_94ee115ab1f5.gif"], ["末力 皮肤", "assets/img_0b27a5fd63ec.gif"], ["骸星", "assets/img_f09d0b60a936.gif"], ["明霄", "assets/img_d5ee006a4784.gif"], ["枪蛋", "assets/img_745d113b055b.gif"], ["金刚猛男", "assets/img_47d205116bc0.gif"], ["卡皮枪客巴拉", "assets/img_79539ca8c992.gif"], ["战神阿瑞斯", "assets/img_212f7de7dee1.gif"], ["俺的枪客", "assets/img_df88b20bad8c.gif"], ["裁星", "assets/img_b5dfc679cfe1.gif"], ["龙枪·牙", "assets/img_12950a77ceb0.gif"], ["标枪社·骁", "assets/img_d397f99482f3.gif"]], "剑宗": [["剑宗", "assets/img_31a0fc250254.gif"], ["孙尚香", "assets/img_85b4a48e90e3.gif"], ["《剑总》", "assets/img_6014119f7171.gif"], ["《剑》", "assets/img_1a60241261f3.gif"], ["凛音", "assets/img_883d18d5ca06.gif"], ["青锋", "assets/img_55267b9d4972.gif"], ["剑蛋", "assets/img_550969df3b13.gif"], ["绯蔷之主·伊芙琳", "assets/img_c8b6ae2c3685.gif"], ["卡皮剑宗巴拉", "assets/img_2aa1ce904990.gif"], ["罪恶佳人·罗娜", "assets/img_85229bc0d89a.gif"], ["俺的剑宗", "assets/img_abcc6a467aa2.gif"], ["窃月", "assets/img_6168b99d2ba9.gif"], ["微风剑", "assets/img_233e8506bce3.gif"], ["击剑社·珂", "assets/img_8ca2fe572311.gif"]], "咒法骑士": [["咒法骑士", "assets/img_c5b2959e2437.gif"], ["周瑜 字公瑾", "assets/img_cb3813491605.gif"], ["《咒》", "assets/img_ae2bc71155ce.gif"], ["凹凸黑", "assets/img_aa5bc75163dc.gif"], ["铁扇公主", "assets/img_38baacc489bf.gif"], ["咒蛋", "assets/img_bedb74901f3f.gif"], ["渡鸦之咒·枯木", "assets/img_5e67633421dd.gif"], ["卡皮咒法骑士巴拉", "assets/img_cac374564019.gif"], ["侦探社·夏洛特", "assets/img_81b916e02c87.gif"], ["俺的咒法骑士", "assets/img_097a564a8c28.gif"], ["紫核", "assets/img_dff59a3fe6d1.gif"], ["烬羽·朱雀", "assets/img_795750646c42.gif"]], "占星师": [["占星师", "assets/img_507b5041e125.gif"], ["诸葛亮 字孔明", "assets/img_a5b9b25fa882.gif"], ["《星》", "assets/img_d393e1843770.gif"], ["极光圣骑", "assets/img_6f33e238b109.gif"], ["星蛋", "assets/img_abb4f2260539.gif"], ["UFO研究员·朱利安", "assets/img_88e79f416c1e.gif"], ["卡皮占星师巴拉", "assets/img_73b248294257.gif"], ["渊触舵手·黑萨姆", "assets/img_cfb4f92db9a1.gif"], ["瞳海星沉·天河", "assets/img_84110d945bac.gif"], ["俺的占星师", "assets/img_6bcd6e8ad001.gif"]], "领主": [["领主", "assets/img_34dc9058c590.gif"], ["曹操 字孟德", "assets/img_18df549ee5d6.gif"], ["《令 主》", "assets/img_095b43e7a2a7.gif"], ["《领》", "assets/img_ba7e5e319e41.gif"], ["影月", "assets/img_4e92b1ca6ec0.gif"], ["寅将军", "assets/img_12edc520e5ac.gif"], ["魔械统帅·奥古斯都", "assets/img_926a39f07829.gif"], ["领蛋", "assets/img_98d27c3bef06.gif"], ["摇滚社·佐克", "assets/img_c28cfc1757bb.gif"], ["卡皮领主巴拉", "assets/img_6acbb395cc57.gif"], ["缚誓魔龙·枷顿", "assets/img_babe027e58bc.gif"], ["俺的领主", "assets/img_517e0c245e35.gif"], ["哀唳穹宇·冥翎", "assets/img_5f7d5b22089f.gif"], ["我的刀盾", "assets/img_870828899fb0.gif"]], "武斗家": [["武斗家", "assets/img_8caf57da6f36.gif"], ["关银屏", "assets/img_976d341e92c6.gif"], ["《武》", "assets/img_30c9fd6e45b4.gif"], ["玉面狐狸", "assets/img_129ae1bf7204.gif"], ["晴雪·糖悠悠", "assets/img_8701fea133a7.gif"], ["武蛋", "assets/img_d72f2edc6c0b.gif"], ["新闻社·知夏", "assets/img_43353bee68fb.gif"], ["卡皮武斗家巴拉", "assets/img_d2d749d972c8.gif"], ["炎之魔使·伊格尼丝", "assets/img_f57f0bad7930.gif"], ["碧浪轻翼·青雀", "assets/img_07911d3efc9d.gif"], ["俺的武斗家", "assets/img_45508b479b8a.gif"], ["斗气拳", "assets/img_81485550c792.gif"], ["虎睛石", "assets/img_6766439b0359.gif"]], "戏法师": [["戏法师", "assets/img_09f0025ee04d.gif"], ["荒诞之梦", "assets/img_74704ffd6f2c.gif"], ["《戏》", "assets/img_a3a3290a481d.gif"], ["戏蛋", "assets/img_a0f65afd461f.gif"], ["学园祭女仆·真优", "assets/img_6dad5345f780.gif"], ["影流宗师", "assets/img_14e5613b099e.gif"], ["卡皮戏法师巴拉", "assets/img_da6891884585.gif"], ["绮光旋乐·聆妙", "assets/img_a44d694f4060.gif"], ["俺的戏法师", "assets/img_145614a2593c.gif"], ["紫黄晶", "assets/img_f3fbee6ec687.gif"], ["幻影之刃", "assets/img_87e3a6d58aa9.gif"]], "吟游诗人": [["吟游诗人", "assets/img_3790ae1fb1c1.gif"], ["猫语歌者·妮芙蒂", "assets/img_674506ef379c.gif"], ["《诗》", "assets/img_3c5dbeb2149a.gif"], ["诗蛋", "assets/img_cab767e0f998.gif"], ["啦啦队·晴空", "assets/img_da2172674ba1.gif"], ["卡皮吟游诗人巴拉", "assets/img_6ae452da57a5.gif"], ["秋色·枫恬恬", "assets/img_8f5407eda423.gif"], ["炼狱弦使·烬歌", "assets/img_96be27cdbf87.gif"], ["俺的吟游诗人", "assets/img_72c73b7eaf7e.gif"], ["缪斯卡利俄佩", "assets/img_44ea7fd7a9af.gif"], ["森弦", "assets/img_8e8c971b6f89.gif"]], "枪手": [["枪手", "assets/img_85f1cd9e9bf1.gif"], ["炽焰亡徒·卢西恩", "assets/img_833e252dd063.gif"], ["《手》", "assets/img_a5619f0c6fa9.gif"], ["手蛋", "assets/img_36cec35ac29b.gif"], ["卡皮枪手巴拉", "assets/img_165ed1a8a9ea.gif"], ["主教·赛奥菲尔", "assets/img_863053a14212.gif"], ["射击社·星衡", "assets/img_d37c70d7fd7f.gif"], ["黑陨", "assets/img_72c15471d100.gif"], ["寒鸦", "assets/img_3cf3f77cc7ec.gif"], ["俺的枪手", "assets/img_e61f4fc16d95.gif"]], "机械姬": [["机械姬", "assets/img_558c61683d84.gif"], ["煌蜂", "assets/img_102af13e29e3.gif"], ["沧海遗珠·蓝歌", "assets/img_1f353166c422.gif"], ["姬蛋", "assets/img_2a9ce1bc7c9e.gif"], ["卡皮机械姬巴拉", "assets/img_cc40243c12ce.gif"], ["皇后·卡伊莎", "assets/img_c84a4b53dc3d.gif"], ["荒原初芽·薇塔", "assets/img_adf057b6d224.gif"], ["俺的机械姬", "assets/img_5f57db218436.gif"], ["神秘生物研究社·闻遥", "assets/img_9b41262b75c5.gif"], ["极电双星", "assets/img_a208f507998e.gif"]], "船长": [["船长", "assets/img_44191196e018.gif"], ["幽冥船长·斯派克", "assets/img_91d5913ac48f.gif"], ["船蛋", "assets/img_e940ea7a944d.gif"], ["深海樊笼·编号001", "assets/img_678db169cb9e.gif"], ["卡皮船长巴拉", "assets/img_01d27f4f43d6.gif"], ["潜水社·吉浪", "assets/img_e6b8c053d61f.gif"], ["泊遥", "assets/img_49484de749aa.gif"], ["“大王级”钢铁海盗 皮肤", "assets/img_d455c071156b.gif"], ["磷灰石", "assets/img_4afd8073b9d5.gif"], ["刀与火铳", "assets/img_493bf578ba73.gif"], ["俺的船长", "assets/img_b7fe6758be28.gif"], ["烁轨啸尘·莱昂", "assets/img_58e3aa3b37f8.gif"]], "阴阳家": [["阴阳家", "assets/img_5082441a627d.gif"], ["极域龙姬·寒烬", "assets/img_089a56a88d50.gif"], ["阴阳蛋", "assets/img_b02e105f6689.gif"], ["春之女神珀耳塞福涅", "assets/img_2aa9ad53fa05.gif"], ["阴阳", "assets/img_8e52cc8b1590.gif"], ["俺的阴阳家", "assets/img_e15d68542d28.gif"]]}};
 
@@ -258,12 +417,19 @@ function initStars() {
 
 function draw() {
   const btn = document.getElementById('drawBtn');
+  const poolNow = currentPool();
+  if (!poolNow.combos.length) {
+    toast(pool.mode === 'custom'
+      ? '自定义卡池是空的：把角色/技能加回来，或切回精准模式'
+      : '精准卡池里还没有技能，先点右下角「卡池」选一下吧');
+    return;
+  }
   btn.disabled = true;
   btn.textContent = '抽 卡 中 ...';
 
-  const combo = rand(charSkill);
+  const combo = rand(poolNow.combos);
   const charName = combo.char;
-  const skinPool = skins[charName] || [];
+  const skinPool = poolNow.skinMap[charName] || [];
   const skin = skinPool.length ? rand(skinPool) : null;
 
   const card1 = document.getElementById('card1');
@@ -293,7 +459,10 @@ function draw() {
         </div>
       `;
     } else {
-      r2.innerHTML = `<div class="placeholder">该角色暂无皮肤数据</div>`;
+      const anySkin = (skins[charName] || []).length > 0;
+      r2.innerHTML = anySkin
+        ? `<div class="placeholder">该角色的皮肤都不在卡池里</div>`
+        : `<div class="placeholder">该角色暂无皮肤数据</div>`;
     }
 
     addHistory(combo, skin);
@@ -326,9 +495,427 @@ function addHistory(combo, skin) {
 
 function updateStats() {
   const totalSkins = Object.values(skins).reduce((a, b) => a + b.length, 0);
-  document.getElementById('stats').innerHTML =
-    `共 <b>${charSkill.length}</b> 个角色技能组合 · <b>${Object.keys(skins).length}</b> 位角色 · <b>${totalSkins}</b> 款皮肤`;
+  const p = currentPool();
+  const pooledSkins = Object.values(p.skinMap).reduce((a, b) => a + b.length, 0);
+  const el = document.getElementById('stats');
+  const isPreciseFull = pool.mode === 'precise' && p.chars.size === CHAR_LIST.length && p.combos.length === charSkill.length && pooledSkins === totalSkins;
+  const modeName = pool.mode === 'custom' ? '自定义' : '精准';
+  el.innerHTML = isPreciseFull
+    ? `共 <b>${charSkill.length}</b> 个角色技能组合 · <b>${Object.keys(skins).length}</b> 位角色 · <b>${totalSkins}</b> 款皮肤`
+    : `${modeName}卡池：<b>${p.chars.size}</b> 位角色 · <b>${p.combos.length}</b> 个技能 · <b>${pooledSkins}</b> 款皮肤（全部 ${charSkill.length} / ${totalSkins}）`;
+  const hint = document.getElementById('modeHint');
+  if (hint) {
+    hint.innerHTML = `正在用 <b>${modeName}卡池</b> 抽卡 · ${p.chars.size} 位角色 / ${p.combos.length} 个技能 / ${pooledSkins} 款皮肤`;
+  }
+  const summary = document.getElementById('poolSummary');
+  if (summary) updatePoolSummary();
 }
+
+/* ================= 卡池设置 ================= */
+const POOL_KEY = 'yqqs.pool.v1';
+const CHAR_LIST = (() => {
+  const seen = new Set();
+  const list = [];
+  charSkill.forEach(e => { if (!seen.has(e.char)) { seen.add(e.char); list.push(e.char); } });
+  Object.keys(skins).forEach(c => { if (!seen.has(c)) { seen.add(c); list.push(c); } });
+  return list;
+})();
+const CHAR_AVATAR = (() => {
+  const map = {};
+  charSkill.forEach(e => { if (!map[e.char]) map[e.char] = e.avatar; });
+  Object.keys(skins).forEach(c => { if (!map[c]) map[c] = (skins[c][0] || [])[1] || ''; });
+  return map;
+})();
+const TOTAL_SKINS = Object.values(skins).reduce((a, b) => a + b.length, 0);
+
+const pool = {
+  chars: new Set(CHAR_LIST),
+  seenChars: new Set(CHAR_LIST),
+  offSkill: new Set(),   // 精准模式取消勾选的技能
+  offSkin: new Set(),    // 精准模式取消勾选的皮肤
+  cutChars: new Set(),   // 自定义模式整卡移出的角色
+  cutSkill: new Set(),   // 自定义模式再删掉的技能
+  cutSkin: new Set(),    // 自定义模式再删掉的皮肤
+  mode: 'precise'        // 当前按哪个卡池抽卡：precise / custom
+};
+
+const skillKey = (c, s) => c + '\u0001' + s;
+const skinKey = (c, n) => c + '\u0001' + n;
+
+function loadPool() {
+  let raw = null;
+  try { raw = localStorage.getItem(POOL_KEY); } catch (e) { /* 无痕模式 */ }
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    const seen = new Set(d.seenChars || []);
+    const chars = new Set((d.chars || []).filter(c => CHAR_LIST.indexOf(c) >= 0));
+    CHAR_LIST.forEach(c => { if (!seen.has(c)) chars.add(c); });   // 数据更新后新增的角色默认进池
+    pool.chars = chars;
+    pool.offSkill = new Set(d.offSkill || []);
+    pool.offSkin = new Set(d.offSkin || []);
+    pool.cutChars = new Set(d.cutChars || []);
+    pool.cutSkill = new Set(d.cutSkill || []);
+    pool.cutSkin = new Set(d.cutSkin || []);
+    pool.mode = d.mode === 'custom' ? 'custom' : 'precise';
+  } catch (e) { /* 存档坏了就用默认全收集 */ }
+}
+
+function savePool() {
+  pool.seenChars = new Set(CHAR_LIST);
+  try {
+    localStorage.setItem(POOL_KEY, JSON.stringify({
+      chars: [...pool.chars],
+      seenChars: [...pool.seenChars],
+      offSkill: [...pool.offSkill],
+      offSkin: [...pool.offSkin],
+      cutChars: [...pool.cutChars],
+      cutSkill: [...pool.cutSkill],
+      cutSkin: [...pool.cutSkin],
+      mode: pool.mode
+    }));
+  } catch (e) {}
+}
+
+const skillsOfChar = c => charSkill.filter(e => e.char === c);
+
+function finishPool(combos, skinMap) {
+  const chars = new Set(combos.map(e => e.char));
+  Object.keys(skinMap).forEach(c => chars.add(c));
+  return { combos, skinMap, chars };
+}
+
+/* 精准卡池：角色 + 逐条勾选的技能/皮肤 */
+function precisePool() {
+  const combos = charSkill.filter(e => pool.chars.has(e.char) && !pool.offSkill.has(skillKey(e.char, e.skill)));
+  const skinMap = {};
+  Object.keys(skins).forEach(c => {
+    if (!pool.chars.has(c)) return;
+    const list = skins[c].filter(s => !pool.offSkin.has(skinKey(c, s[0])));
+    if (list.length) skinMap[c] = list;
+  });
+  return finishPool(combos, skinMap);
+}
+
+/* 自定义卡池：在精准卡池基础上再整卡/逐条删减 */
+function customPool() {
+  const base = precisePool();
+  const combos = base.combos.filter(e => !pool.cutChars.has(e.char) && !pool.cutSkill.has(skillKey(e.char, e.skill)));
+  const skinMap = {};
+  Object.keys(base.skinMap).forEach(c => {
+    if (pool.cutChars.has(c)) return;
+    const list = base.skinMap[c].filter(s => !pool.cutSkin.has(skinKey(c, s[0])));
+    if (list.length) skinMap[c] = list;
+  });
+  return finishPool(combos, skinMap);
+}
+
+/* 抽卡按“当前模式”对应的卡池走 */
+function currentPool() {
+  return pool.mode === 'custom' ? customPool() : precisePool();
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+}
+
+/* ---- 侧边栏 UI ---- */
+const poolDrawer = document.getElementById('poolDrawer');
+const poolMask = document.getElementById('poolMask');
+const poolBody = document.getElementById('poolBody');
+const poolSummary = document.getElementById('poolSummary');
+const poolToastEl = document.getElementById('poolToast');
+let poolTab = 'precise';
+let cutQuery = '';
+let toastTimer = null;
+
+function toast(msg) {
+  poolToastEl.textContent = msg;
+  poolToastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => poolToastEl.classList.remove('show'), 2400);
+}
+
+function openPool() {
+  poolDrawer.classList.add('open');
+  poolMask.classList.add('open');
+  document.body.classList.add('pool-open');
+  renderPool();
+}
+function closePool() {
+  poolDrawer.classList.remove('open');
+  poolMask.classList.remove('open');
+  document.body.classList.remove('pool-open');
+}
+
+function poolSizeText(p) {
+  const skinsIn = Object.values(p.skinMap).reduce((a, b) => a + b.length, 0);
+  return `${p.chars.size} 角色 · ${p.combos.length} 技能 · ${skinsIn} 皮肤`;
+}
+
+function updatePoolSummary() {
+  const pr = precisePool();
+  const cu = customPool();
+  poolSummary.innerHTML =
+    `<div>精准卡池：<b>${poolSizeText(pr)}</b></div>` +
+    `<div>自定义卡池：<b>${poolSizeText(cu)}</b></div>` +
+    `<div style="color:#5f6f93">当前抽卡：${pool.mode === 'custom' ? '自定义' : '精准'}卡池</div>`;
+}
+
+function renderPool() {
+  if (poolTab === 'precise') renderPrecise();
+  else renderCustom();
+  updatePoolSummary();
+  updateStats();
+}
+
+function renderPrecise() {
+  const scroll = poolBody.scrollTop;
+  const enabledSkills = charSkill.filter(e => pool.chars.has(e.char) && !pool.offSkill.has(skillKey(e.char, e.skill)));
+  let enabledSkins = 0;
+  Object.keys(skins).forEach(c => {
+    if (!pool.chars.has(c)) return;
+    skins[c].forEach(s => { if (!pool.offSkin.has(skinKey(c, s[0]))) enabledSkins++; });
+  });
+
+  const chips = CHAR_LIST.map(c => {
+    const on = pool.chars.has(c);
+    return `<button class="char-chip ${on ? 'on' : 'off'}" data-char="${esc(c)}" type="button" aria-pressed="${on}">
+      <img src="${CHAR_AVATAR[c]}" alt="" onerror="this.style.visibility='hidden'"><span>${esc(c)}</span>
+    </button>`;
+  }).join('');
+
+  const skillBlocks = CHAR_LIST.filter(c => pool.chars.has(c) && skillsOfChar(c).length).map(c => {
+    const list = skillsOfChar(c);
+    const on = list.filter(e => !pool.offSkill.has(skillKey(c, e.skill))).length;
+    return `<details class="pool-item" data-char="${esc(c)}" data-count-label="技能">
+      <summary><img src="${CHAR_AVATAR[c]}" alt="" onerror="this.style.visibility='hidden'">
+        <span class="name">${esc(c)}</span><span class="count">${on}/${list.length} 技能</span></summary>
+      <div class="list">${list.map(e => {
+        const checked = !pool.offSkill.has(skillKey(c, e.skill));
+        return `<label class="check-row"><input type="checkbox" data-kind="skill" data-char="${esc(c)}" data-name="${esc(e.skill)}" ${checked ? 'checked' : ''}>
+          <img src="${e.skillImg}" alt="" onerror="this.style.visibility='hidden'">
+          <span class="label">${esc(e.skill)}</span></label>`;
+      }).join('')}</div></details>`;
+  }).join('');
+
+  const skinBlocks = CHAR_LIST.filter(c => pool.chars.has(c) && (skins[c] || []).length).map(c => {
+    const list = skins[c];
+    const on = list.filter(s => !pool.offSkin.has(skinKey(c, s[0]))).length;
+    return `<details class="pool-item" data-char="${esc(c)}" data-count-label="皮肤">
+      <summary><img src="${CHAR_AVATAR[c]}" alt="" onerror="this.style.visibility='hidden'">
+        <span class="name">${esc(c)}</span><span class="count">${on}/${list.length} 皮肤</span></summary>
+      <div class="list">${list.map(s => {
+        const checked = !pool.offSkin.has(skinKey(c, s[0]));
+        return `<label class="check-row"><input type="checkbox" data-kind="skin" data-char="${esc(c)}" data-name="${esc(s[0])}" ${checked ? 'checked' : ''}>
+          <img src="${s[1]}" alt="" onerror="this.style.visibility='hidden'">
+          <span class="label">${esc(s[0])}</span></label>`;
+      }).join('')}</div></details>`;
+  }).join('');
+
+  poolBody.innerHTML = `
+    <div class="pool-note">默认全收集。这里的改动只影响抽卡卡池，不会影响数据本身。</div>
+    <div class="pool-section">
+      <div class="pool-section-head"><span>① 选择卡池角色</span><b>${pool.chars.size}/${CHAR_LIST.length}</b>
+        <div class="mini-btns"><button data-act="chars-all" type="button">全选</button><button data-act="chars-none" type="button">清空</button><button data-act="chars-invert" type="button">反选</button></div>
+      </div>
+      <div class="chip-grid">${chips}</div>
+    </div>
+    <div class="pool-section">
+      <div class="pool-section-head"><span>② 勾选技能</span><b>${enabledSkills.length}/${charSkill.length}</b>
+        <div class="mini-btns"><button data-act="skills-all" type="button">全选</button><button data-act="skills-none" type="button">全不选</button></div>
+      </div>
+      ${skillBlocks || '<div class="empty-tip">还没有选择角色。</div>'}
+    </div>
+    <div class="pool-section">
+      <div class="pool-section-head"><span>③ 勾选皮肤</span><b>${enabledSkins}/${TOTAL_SKINS}</b>
+        <div class="mini-btns"><button data-act="skins-all" type="button">全选</button><button data-act="skins-none" type="button">全不选</button></div>
+      </div>
+      ${skinBlocks || '<div class="empty-tip">还没有选择角色。</div>'}
+    </div>`;
+  poolBody.scrollTop = scroll;
+}
+
+function renderCustom() {
+  const scroll = poolBody.scrollTop;
+  const q = cutQuery.toLowerCase();
+  let html = `<input class="pool-search" id="cutSearch" placeholder="搜索角色 / 技能 / 皮肤…" value="${esc(cutQuery)}">
+    <div class="pool-note">这是<b>自定义卡池</b>：在精准卡池的基础上整卡移出角色，或逐条取消技能 / 皮肤。只有切到「自定义模式」时，抽卡才会用这套卡池。</div>
+    <div class="pool-section-head"><span>精准卡池里的角色 <b>${CHAR_LIST.filter(c => pool.chars.has(c)).length}</b> 位</span>
+      <div class="mini-btns"><button data-act="cut-reset" type="button">恢复未删减</button></div></div>`;
+
+  const chars = CHAR_LIST.filter(c => pool.chars.has(c));
+  if (!chars.length) html += `<div class="empty-tip">还没有选择任何角色，先去「精准模式」选角色吧。</div>`;
+
+  chars.forEach(c => {
+    const list = [];
+    skillsOfChar(c).forEach(e => { if (!pool.offSkill.has(skillKey(c, e.skill))) list.push({ kind: 'skill', name: e.skill, img: e.skillImg, tag: '技能' }); });
+    (skins[c] || []).forEach(s => { if (!pool.offSkin.has(skinKey(c, s[0]))) list.push({ kind: 'skin', name: s[0], img: s[1], tag: '皮肤' }); });
+    if (!list.length) return;
+    let shown = list;
+    if (q && c.toLowerCase().indexOf(q) < 0) shown = list.filter(x => x.name.toLowerCase().indexOf(q) >= 0);
+    if (!shown.length) return;
+    const charCut = pool.cutChars.has(c);
+    const inPool = charCut ? 0 : shown.filter(x => x.kind === 'skill' ? !pool.cutSkill.has(skillKey(c, x.name)) : !pool.cutSkin.has(skinKey(c, x.name))).length;
+    html += `<details class="pool-item ${charCut ? 'is-cut' : ''}" data-char="${esc(c)}" data-count-label="在池" ${q ? 'open' : ''}>
+      <summary><img src="${CHAR_AVATAR[c]}" alt="" onerror="this.style.visibility='hidden'">
+        <span class="name">${esc(c)}</span>
+        <span class="count">${charCut ? '已移出' : inPool + '/' + shown.length + ' 在池'}</span></summary>
+      <div class="list">
+        <label class="check-row char-row">
+          <input type="checkbox" data-kind="char" data-char="${esc(c)}" ${charCut ? '' : 'checked'}>
+          <span class="label" style="color:#ffd54f;font-weight:700">整个角色</span>
+          <span class="tag">${charCut ? '已移出卡池' : '在卡池中'}</span>
+        </label>
+        ${shown.map(x => {
+          const on = !charCut && (x.kind === 'skill' ? !pool.cutSkill.has(skillKey(c, x.name)) : !pool.cutSkin.has(skinKey(c, x.name)));
+          return `<label class="check-row ${charCut ? 'disabled' : ''}"><input type="checkbox" data-kind="${x.kind}" data-char="${esc(c)}" data-name="${esc(x.name)}" ${on ? 'checked' : ''} ${charCut ? 'disabled' : ''}>
+            <img src="${x.img}" alt="" onerror="this.style.visibility='hidden'">
+            <span class="label">${esc(x.name)}</span><span class="tag">${x.tag}</span></label>`;
+        }).join('')}
+      </div></details>`;
+  });
+
+  poolBody.innerHTML = html;
+  poolBody.scrollTop = scroll;
+  const search = poolBody.querySelector('#cutSearch');
+  if (search) {
+    search.addEventListener('input', ev => {
+      cutQuery = ev.target.value;
+      const top = poolBody.scrollTop;
+      renderCustom();
+      const again = poolBody.querySelector('#cutSearch');
+      if (again) { again.focus(); again.setSelectionRange(again.value.length, again.value.length); }
+      poolBody.scrollTop = top;
+    });
+  }
+}
+
+function refreshDetailsCount(details) {
+  if (!details) return;
+  const boxes = details.querySelectorAll('input[data-kind="skill"],input[data-kind="skin"]');
+  const on = details.querySelectorAll('input[data-kind="skill"]:checked,input[data-kind="skin"]:checked').length;
+  const label = details.dataset.countLabel || '条目';
+  const count = details.querySelector('.count');
+  const charBox = details.querySelector('input[data-kind="char"]');
+  if (charBox && !charBox.checked) {
+    if (count) count.textContent = '已移出';
+    return;
+  }
+  if (count) count.textContent = `${on}/${boxes.length} ${label}`;
+}
+
+function toggleChar(c) {
+  if (pool.chars.has(c)) pool.chars.delete(c); else pool.chars.add(c);
+  savePool();
+  renderPrecise();
+  updatePoolSummary();
+  updateStats();
+}
+
+function applyPoolAction(act) {
+  if (act === 'chars-all') pool.chars = new Set(CHAR_LIST);
+  else if (act === 'chars-none') pool.chars = new Set();
+  else if (act === 'chars-invert') {
+    const next = new Set();
+    CHAR_LIST.forEach(c => { if (!pool.chars.has(c)) next.add(c); });
+    pool.chars = next;
+  } else if (act === 'skills-all') pool.offSkill.clear();
+  else if (act === 'skills-none') charSkill.forEach(e => pool.offSkill.add(skillKey(e.char, e.skill)));
+  else if (act === 'skins-all') pool.offSkin.clear();
+  else if (act === 'skins-none') Object.keys(skins).forEach(c => skins[c].forEach(s => pool.offSkin.add(skinKey(c, s[0]))));
+  else if (act === 'cut-reset') { pool.cutChars.clear(); pool.cutSkill.clear(); pool.cutSkin.clear(); }
+  else return;
+  savePool();
+  renderPool();
+}
+
+poolBody.addEventListener('click', e => {
+  const chip = e.target.closest('.char-chip');
+  if (chip) { toggleChar(chip.dataset.char); return; }
+  const act = e.target.closest('[data-act]');
+  if (act) applyPoolAction(act.dataset.act);
+});
+
+poolBody.addEventListener('change', e => {
+  const cb = e.target;
+  if (!cb || cb.type !== 'checkbox') return;
+  const c = cb.dataset.char;
+  if (!c) return;
+  if (cb.dataset.kind === 'char') {
+    if (cb.checked) pool.cutChars.delete(c); else pool.cutChars.add(c);
+    savePool();
+    renderCustom();
+    updatePoolSummary();
+    updateStats();
+    return;
+  }
+  const name = cb.dataset.name;
+  if (name === undefined) return;
+  const k = cb.dataset.kind === 'skill' ? skillKey(c, name) : skinKey(c, name);
+  if (poolTab === 'precise') {
+    const set = cb.dataset.kind === 'skill' ? pool.offSkill : pool.offSkin;
+    if (cb.checked) set.delete(k); else set.add(k);
+  } else {
+    const set = cb.dataset.kind === 'skill' ? pool.cutSkill : pool.cutSkin;
+    if (cb.checked) set.delete(k); else set.add(k);
+  }
+  savePool();
+  updatePoolSummary();
+  updateStats();
+  refreshDetailsCount(cb.closest('details'));
+});
+
+/* 模式切换：决定用精准卡池还是自定义卡池抽卡 */
+function syncModeUI() {
+  Array.from(document.querySelectorAll('.mode-btn')).forEach(b => {
+    const on = b.dataset.mode === pool.mode;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  Array.from(document.querySelectorAll('.pool-tab')).forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === pool.mode);
+  });
+}
+
+function setMode(mode, rerender) {
+  pool.mode = mode === 'custom' ? 'custom' : 'precise';
+  poolTab = pool.mode;
+  savePool();
+  syncModeUI();
+  if (rerender !== false) renderPool();
+  updateStats();
+  updatePoolSummary();
+}
+
+document.getElementById('modeSwitch').addEventListener('click', e => {
+  const btn = e.target.closest('.mode-btn');
+  if (btn) setMode(btn.dataset.mode);
+});
+
+document.getElementById('poolTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.pool-tab');
+  if (!btn) return;
+  setMode(btn.dataset.tab);
+});
+document.getElementById('poolFab').addEventListener('click', openPool);
+document.getElementById('poolClose').addEventListener('click', closePool);
+poolMask.addEventListener('click', closePool);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && poolDrawer.classList.contains('open')) closePool();
+});
+document.getElementById('poolReset').addEventListener('click', () => {
+  pool.chars = new Set(CHAR_LIST);
+  pool.offSkill.clear(); pool.offSkin.clear();
+  pool.cutChars.clear(); pool.cutSkill.clear(); pool.cutSkin.clear();
+  savePool();
+  renderPool();
+  toast('已恢复全收集卡池');
+});
+
+loadPool();
+poolTab = pool.mode;
+syncModeUI();
 
 document.getElementById('drawBtn').addEventListener('click', draw);
 initStars();

@@ -43,7 +43,7 @@ yqqs-draw/
 python tools/fetch_toolchain.py
 
 # 之后每次：
-python build.py            # 产物在 dist/yqqs-draw-v1.0.0.apk
+python build.py            # 产物在 dist/yqqs-draw-v1.1.0.apk
 python build.py --clean    # 干净重建
 ```
 
@@ -60,7 +60,7 @@ python build.py --clean    # 干净重建
 
 ## 安装
 
-把 `dist/yqqs-draw-v1.0.0.apk` 传到手机点开安装（需要允许「安装未知来源应用」）。
+把 `dist/yqqs-draw-v1.1.0.apk` 传到手机点开安装（需要允许「安装未知来源应用」）。
 应用完全离线：**没有申请 INTERNET 权限**，页面、图片、字体都在安装包里。
 
 ## 签名密钥
@@ -83,8 +83,18 @@ DATA.skins     = { "角色名": [ ["皮肤名", "assets/xxx.gif"], ... ] }
 2. 用 `python tools/update_data.py --data 新数据.json` 替换内嵌数据（会校验每个引用到的图片是否存在、并列出没被引用的图片）。
 3. `python build.py` 重新出包，改 `build.py` / `AndroidManifest.xml` 里的版本号即可。
 
+## 卡池模式（v1.1.0 新增）
+
+默认是「全收集」卡池，但大多数玩家并不是全角色全皮肤，所以可以自己圈定卡池。点右下角 **⚙ 卡池** 打开设置：
+
+- **精准模式**：先勾选角色，再按角色勾选技能和皮肤，作为自己的基础卡池。
+- **自定义模式**：在精准卡池的基础上做减法——可以把整个角色移出，也可以逐条删掉某个技能/皮肤。
+- 主界面标题下有「精准模式 / 自定义模式」切换，**抽卡按当前模式的卡池来出**；侧边栏的 tab 和主界面的开关是同一个状态。
+- 设置存在浏览器 `localStorage`（APK 的 WebView 里同样有效），关掉重开还在；「恢复全收集」一键回到默认。
+- 以后数据更新新增的角色/技能/皮肤会自动并入卡池，不会因为旧存档漏掉新内容。
+
 ## 已知情况
 
 - `screenOrientation="portrait"`：竖屏使用，旋转不重载页面。
 - 页面 ≤600px 宽有专门的手机端布局（会改成上下排列）。
-- 目前没做「抽卡记录持久化」，关掉应用后清空；需要的话可以加 `localStorage`。
+- 卡池设置会持久化到 `localStorage`；「抽卡记录」目前不持久化，关掉应用后清空。
