@@ -19,10 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-注意：本协议只覆盖本仓库的代码（页面逻辑/样式、构建脚本、Android 容器工程）。
-`web/assets/` 下的角色、技能、皮肤图片以及 `web/index.html` 中内嵌的游戏数据，
-版权归《元气骑士》开发商凉屋游戏（ChillyRoom）及元气骑士中文维基贡献者所有，
-此处仅用于非商业的粉丝向工具。若权利人提出要求，会立即移除相关内容。
