@@ -8,8 +8,9 @@
 ## 下载安装
 
 - **APK 下载**：<https://github.com/wwwwwlmr/soul-knight-draw/releases/latest>
+- **网页版（在线玩）**：<https://wwwwwlmr.github.io/soul-knight-draw/web/index.html>
 - 仓库地址：<https://github.com/wwwwwlmr/soul-knight-draw>
-- 网页版：直接打开 `web/index.html` 即可（无需服务器）
+- 本地网页版：直接打开 `web/index.html` 即可（无需服务器）
 
 ---
 
