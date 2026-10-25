@@ -1,4 +1,4 @@
-"""Download + unpack the Windows toolchain needed to build the yqqs-draw APK
+"""Download + unpack the Windows toolchain needed to build the soul-knight-draw APK
 without Android Studio / Gradle: Microsoft OpenJDK 17, Android build-tools 34,
 Android platform (android-35) jar.
 """

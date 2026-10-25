@@ -1,4 +1,4 @@
-# 元气骑士扭蛋机（yqqs-draw）
+# Soul Knight Draw · 元气骑士扭蛋机
 
 一个纯静态的「双重抽卡」小网页：抽角色 + 技能，再抽该角色的专属皮肤。
 数据与图片来自**元气骑士中文维基**，仅供娱乐。
@@ -7,8 +7,8 @@
 
 ## 下载安装
 
-- **APK 下载**：<https://github.com/wwwwwlmr/yqqs-draw/releases/latest>
-- 仓库地址：<https://github.com/wwwwwlmr/yqqs-draw>
+- **APK 下载**：<https://github.com/wwwwwlmr/soul-knight-draw/releases/latest>
+- 仓库地址：<https://github.com/wwwwwlmr/soul-knight-draw>
 - 网页版：直接打开 `web/index.html` 即可（无需服务器）
 
 ---
@@ -16,7 +16,7 @@
 ## 目录结构
 
 ```
-yqqs-draw/
+soul-knight-draw/
 ├── web/                        # 网页本体（唯一需要维护的内容）
 │   ├── index.html              # 单文件页面：样式 + 逻辑 + 内嵌 DATA 数据
 │   ├── assets/                 # 角色/技能/皮肤图片（792 gif + 146 png）
@@ -43,7 +43,7 @@ yqqs-draw/
 python tools/fetch_toolchain.py
 
 # 之后每次：
-python build.py            # 产物在 dist/yqqs-draw-v1.1.2.apk
+python build.py            # 产物在 dist/soul-knight-draw-v1.1.2.apk
 python build.py --clean    # 干净重建
 ```
 
@@ -60,7 +60,7 @@ python build.py --clean    # 干净重建
 
 ## 安装
 
-把 `dist/yqqs-draw-v1.1.2.apk` 传到手机点开安装（需要允许「安装未知来源应用」）。
+把 `dist/soul-knight-draw-v1.1.2.apk` 传到手机点开安装（需要允许「安装未知来源应用」）。
 应用完全离线：**没有申请 INTERNET 权限**，页面、图片、字体都在安装包里。
 
 ## 签名密钥
@@ -92,6 +92,12 @@ DATA.skins     = { "角色名": [ ["皮肤名", "assets/xxx.gif"], ... ] }
 - 主界面标题下有「精准模式 / 自定义模式」切换，**抽卡按当前模式的卡池来出**；侧边栏的 tab 和主界面的开关是同一个状态。
 - 设置存在浏览器 `localStorage`（APK 的 WebView 里同样有效），关掉重开还在；「恢复全收集」一键回到默认。
 - 以后数据更新新增的角色/技能/皮肤会自动并入卡池，不会因为旧存档漏掉新内容。
+
+## 开源协议
+
+- **代码**（`web/index.html` 里的逻辑与样式、`build.py`、`tools/`、`android/`）采用 **MIT**，见 [LICENSE](LICENSE)。
+- **游戏素材**：`web/assets/` 下的角色、技能、皮肤图片以及内嵌的游戏数据，版权归《元气骑士》开发商凉屋游戏（ChillyRoom）与元气骑士中文维基贡献者所有。本项目只做**非商业的粉丝向工具**，如权利人提出要求会立即移除相关内容。
+- 本项目与凉屋游戏官方无关。
 
 ## 已知情况
 

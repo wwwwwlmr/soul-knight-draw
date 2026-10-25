@@ -5,7 +5,7 @@ import zipfile
 import zlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APK = os.path.join(ROOT, "dist", "yqqs-draw-v1.0.0.apk")
+APK = os.path.join(ROOT, "dist", "soul-knight-draw-v1.1.2.apk")
 JDK = os.path.join(ROOT, "tools", "jdk", "jdk-17.0.20.1+1")
 BT = os.path.join(ROOT, "tools", "build-tools", "android-14")
 env = dict(os.environ)

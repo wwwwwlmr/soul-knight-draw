@@ -238,7 +238,7 @@ def main():
             "-dname", "CN=yqqs-draw, OU=Personal, O=yqqs-draw, L=Shanghai, C=CN",
         ], env=tc["env"])
 
-    out_apk = os.path.join(DIST, "yqqs-draw-v%s.apk" % VERSION)
+    out_apk = os.path.join(DIST, "soul-knight-draw-v%s.apk" % VERSION)
     if os.path.exists(out_apk):
         os.remove(out_apk)
     run([
